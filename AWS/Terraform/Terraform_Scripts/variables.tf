@@ -1,5 +1,3 @@
-resource "aws_variable" "my-ip" {
-    description = "My IP address in CIDR notation"
-    type        = string
-    default     = "192.168.32.10/32"
+variable "my-ip" {
+    default = "192.168.10.10/32"
 }
