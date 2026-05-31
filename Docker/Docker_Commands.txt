@@ -1,0 +1,649 @@
+#Docker Installation on Amazon Linux Instance:
+	[root@ip-172-31-80-214 ec2-user]# yum install -y docker
+			Amazon Linux 2023 Kernel Livepatch repository                                                                                                207 kB/s |  31 kB     00:00
+			Dependencies resolved.
+			=============================================================================================================================================================================
+			 Package                                         Architecture                    Version                                          Repository                            Size
+			=============================================================================================================================================================================
+			Installing:
+			 docker                                          x86_64                          25.0.14-1.amzn2023.0.2                           amazonlinux                           46 M
+			Installing dependencies:
+			 container-selinux                               noarch                          4:2.245.0-1.amzn2023                             amazonlinux                           58 k
+			 containerd                                      x86_64                          2.2.1-1.amzn2023.0.1                             amazonlinux                           24 M
+			 iptables-libs                                   x86_64                          1.8.8-3.amzn2023.0.2                             amazonlinux                          401 k
+			 iptables-nft                                    x86_64                          1.8.8-3.amzn2023.0.2                             amazonlinux                          183 k
+			 libcgroup                                       x86_64                          3.0-1.amzn2023.0.1                               amazonlinux                           75 k
+			 libnetfilter_conntrack                          x86_64                          1.0.8-2.amzn2023.0.2                             amazonlinux                           58 k
+			 libnfnetlink                                    x86_64                          1.0.1-19.amzn2023.0.2                            amazonlinux                           30 k
+			 libnftnl                                        x86_64                          1.2.2-2.amzn2023.0.2                             amazonlinux                           84 k
+			 pigz                                            x86_64                          2.5-1.amzn2023.0.3                               amazonlinux                           83 k
+			 runc                                            x86_64                          1.3.4-1.amzn2023.0.2                             amazonlinux                          3.9 M
+
+			Transaction Summary
+			=============================================================================================================================================================================
+			Install  11 Packages
+
+			Total download size: 75 M
+			Installed size: 282 M
+			Downloading Packages:
+			(1/11): container-selinux-2.245.0-1.amzn2023.noarch.rpm                                                                                      1.8 MB/s |  58 kB     00:00
+			(2/11): iptables-libs-1.8.8-3.amzn2023.0.2.x86_64.rpm                                                                                         19 MB/s | 401 kB     00:00
+			(3/11): iptables-nft-1.8.8-3.amzn2023.0.2.x86_64.rpm                                                                                         6.9 MB/s | 183 kB     00:00
+			(4/11): libcgroup-3.0-1.amzn2023.0.1.x86_64.rpm                                                                                              3.0 MB/s |  75 kB     00:00
+			(5/11): libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64.rpm                                                                               2.3 MB/s |  58 kB     00:00
+			(6/11): libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64.rpm                                                                                        1.4 MB/s |  30 kB     00:00
+			(7/11): libnftnl-1.2.2-2.amzn2023.0.2.x86_64.rpm                                                                                             3.2 MB/s |  84 kB     00:00
+			(8/11): pigz-2.5-1.amzn2023.0.3.x86_64.rpm                                                                                                   3.3 MB/s |  83 kB     00:00
+			(9/11): runc-1.3.4-1.amzn2023.0.2.x86_64.rpm                                                                                                  73 MB/s | 3.9 MB     00:00
+			(10/11): containerd-2.2.1-1.amzn2023.0.1.x86_64.rpm                                                                                           71 MB/s |  24 MB     00:00
+			(11/11): docker-25.0.14-1.amzn2023.0.2.x86_64.rpm                                                                                             72 MB/s |  46 MB     00:00
+			-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			Total                                                                                                                                        111 MB/s |  75 MB     00:00
+			Running transaction check
+			Transaction check succeeded.
+			Running transaction test
+			Transaction test succeeded.
+			Running transaction
+			  Preparing        :                                                                                                                                                     1/1
+			  Installing       : runc-1.3.4-1.amzn2023.0.2.x86_64                                                                                                                   1/11
+			  Installing       : containerd-2.2.1-1.amzn2023.0.1.x86_64                                                                                                             2/11
+			  Running scriptlet: containerd-2.2.1-1.amzn2023.0.1.x86_64                                                                                                             2/11
+			  Installing       : pigz-2.5-1.amzn2023.0.3.x86_64                                                                                                                     3/11
+			  Installing       : libnftnl-1.2.2-2.amzn2023.0.2.x86_64                                                                                                               4/11
+			  Installing       : libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64                                                                                                          5/11
+			  Installing       : libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64                                                                                                 6/11
+			  Installing       : iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                                                                                                          7/11
+			  Installing       : iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                                                                                           8/11
+			  Running scriptlet: iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                                                                                           8/11
+			  Installing       : libcgroup-3.0-1.amzn2023.0.1.x86_64                                                                                                                9/11
+			  Running scriptlet: container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                     10/11
+			  Installing       : container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                     10/11
+			  Running scriptlet: container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                     10/11
+			  Running scriptlet: docker-25.0.14-1.amzn2023.0.2.x86_64                                                                                                              11/11
+			  Installing       : docker-25.0.14-1.amzn2023.0.2.x86_64                                                                                                              11/11
+			  Running scriptlet: docker-25.0.14-1.amzn2023.0.2.x86_64                                                                                                              11/11
+			Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /usr/lib/systemd/system/docker.socket.
+
+			  Running scriptlet: container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                     11/11
+			  Running scriptlet: docker-25.0.14-1.amzn2023.0.2.x86_64                                                                                                              11/11
+			  Verifying        : container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                      1/11
+			  Verifying        : containerd-2.2.1-1.amzn2023.0.1.x86_64                                                                                                             2/11
+			  Verifying        : docker-25.0.14-1.amzn2023.0.2.x86_64                                                                                                               3/11
+			  Verifying        : iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                                                                                                          4/11
+			  Verifying        : iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                                                                                           5/11
+			  Verifying        : libcgroup-3.0-1.amzn2023.0.1.x86_64                                                                                                                6/11
+			  Verifying        : libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64                                                                                                 7/11
+			  Verifying        : libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64                                                                                                          8/11
+			  Verifying        : libnftnl-1.2.2-2.amzn2023.0.2.x86_64                                                                                                               9/11
+			  Verifying        : pigz-2.5-1.amzn2023.0.3.x86_64                                                                                                                    10/11
+			  Verifying        : runc-1.3.4-1.amzn2023.0.2.x86_64                                                                                                                  11/11
+
+			Installed:
+			  container-selinux-4:2.245.0-1.amzn2023.noarch                    containerd-2.2.1-1.amzn2023.0.1.x86_64                  docker-25.0.14-1.amzn2023.0.2.x86_64
+			  iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                        iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                libcgroup-3.0-1.amzn2023.0.1.x86_64
+			  libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64               libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64               libnftnl-1.2.2-2.amzn2023.0.2.x86_64
+			  pigz-2.5-1.amzn2023.0.3.x86_64                                   runc-1.3.4-1.amzn2023.0.2.x86_64
+
+			Complete!
+[root@ip-172-31-80-214 ec2-user]#
+===============================================================================================================================
+#To connect to Docker Hub
+	[root@ip-172-31-88-196 ~]# docker login
+			Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
+			You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
+
+			Username: yndurgarao1
+			Password:
+			WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+			Configure a credential helper to remove this warning. See
+			https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+			Login Succeeded
+====================================================================================================
+#To check Docker Version
+	[root@ip-172-31-80-214 ec2-user]# docker --version
+		Docker version 25.0.14, build 0bab007
+	[root@ip-172-31-80-214 ec2-user]# docker -v
+		Docker version 25.0.14, build 0bab007
+====================================================================================================
+#To check Docker service started or not 
+	[root@ip-172-31-80-214 ec2-user]# service docker status
+		Redirecting to /bin/systemctl status docker.service
+		○ docker.service - Docker Application Container Engine
+			 Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+			 Active: inactive (dead)
+		TriggeredBy: ○ docker.socket
+			   Docs: https://docs.docker.com
+====================================================================================================
+#To start docker service 
+	[root@ip-172-31-80-214 ec2-user]# service docker start
+		Redirecting to /bin/systemctl start docker.service
+====================================================================================================
+#To check docker service is started or not 
+	[root@ip-172-31-80-214 ec2-user]# service docker status
+		Redirecting to /bin/systemctl status docker.service
+		○ docker.service - Docker Application Container Engine
+			 Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+			 Active: inactive (dead)
+		TriggeredBy: ○ docker.socket
+			   Docs: https://docs.docker.com
+		[root@ip-172-31-80-214 ec2-user]# service docker start
+		Redirecting to /bin/systemctl start docker.service
+		[root@ip-172-31-80-214 ec2-user]# service docker status
+		Redirecting to /bin/systemctl status docker.service
+		● docker.service - Docker Application Container Engine
+			 Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled)
+			 Active: active (running) since Sun 2026-03-29 05:13:05 UTC; 30s ago
+		TriggeredBy: ● docker.socket
+			   Docs: https://docs.docker.com
+			Process: 28095 ExecStartPre=/bin/mkdir -p /run/docker (code=exited, status=0/SUCCESS)
+			Process: 28096 ExecStartPre=/usr/libexec/docker/docker-setup-runtimes.sh (code=exited, status=0/SUCCESS)
+		   Main PID: 28101 (dockerd)
+			  Tasks: 9
+			 Memory: 30.3M
+				CPU: 202ms
+			 CGroup: /system.slice/docker.service
+					 └─28101 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --default-ulimit nofile=32768:65536
+
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal systemd[1]: Starting docker.service - Docker Application Container Engine...
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal dockerd[28101]: time="2026-03-29T05:13:05.338463248Z" level=info msg="Starting up"
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal dockerd[28101]: time="2026-03-29T05:13:05.380730287Z" level=info msg="Loading containers: start."
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal dockerd[28101]: time="2026-03-29T05:13:05.688701873Z" level=info msg="Loading containers: done."
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal dockerd[28101]: time="2026-03-29T05:13:05.710792548Z" level=info msg="Docker daemon" commit=d334795 containerd-snapshotter=fal>
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal dockerd[28101]: time="2026-03-29T05:13:05.710881433Z" level=info msg="Daemon has completed initialization"
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal dockerd[28101]: time="2026-03-29T05:13:05.743604981Z" level=info msg="API listen on /run/docker.sock"
+		Mar 29 05:13:05 ip-172-31-80-214.ec2.internal systemd[1]: Started docker.service - Docker Application Container Engine.
+		lines 1-22/22 (END)
+		
+#Press q for quit the terminal
+====================================================================================================
+#To Stop docker service
+	[root@ip-172-31-80-214 ec2-user]# service docker stop
+		Redirecting to /bin/systemctl stop docker.service
+		Warning: Stopping docker.service, but it can still be activated by:
+		  docker.socket
+====================================================================================================
+#To get docker information on client and server 
+	[root@ip-172-31-80-214 ec2-user]# docker info
+		Client:
+		 Version:    25.0.14
+		 Context:    default
+		 Debug Mode: false
+		 Plugins:
+		  buildx: Docker Buildx (Docker Inc.)
+			Version:  0.12.1
+			Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+
+		Server:
+		 Containers: 0
+		  Running: 0
+		  Paused: 0
+		  Stopped: 0
+		 Images: 0
+		 Server Version: 25.0.14
+		 Storage Driver: overlay2
+		  Backing Filesystem: xfs
+		  Supports d_type: true
+		  Using metacopy: false
+		  Native Overlay Diff: true
+		  userxattr: false
+		 Logging Driver: json-file
+		 Cgroup Driver: systemd
+		 Cgroup Version: 2
+		 Plugins:
+		  Volume: local
+		  Network: bridge host ipvlan macvlan null overlay
+		  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+		 Swarm: inactive
+		 Runtimes: io.containerd.runc.v2 runc
+		 Default Runtime: runc
+		 Init Binary: docker-init
+		 containerd version:
+		 runc version: d6d73eb8c60246978da649ffe75ce5c8bca8f856
+		 init version: de40ad0
+		 Security Options:
+		  seccomp
+		   Profile: builtin
+		  cgroupns
+		 Kernel Version: 6.1.164-196.303.amzn2023.x86_64
+		 Operating System: Amazon Linux 2023.10.20260325
+		 OSType: linux
+		 Architecture: x86_64
+		 CPUs: 2
+		 Total Memory: 3.73GiB
+		 Name: ip-172-31-80-214.ec2.internal
+		 ID: ce845c56-de0c-4afc-820a-42cd8a2b2d00
+		 Docker Root Dir: /var/lib/docker
+		 Debug Mode: false
+		 Username: yndurgarao1
+		 Experimental: false
+		 Insecure Registries:
+		  127.0.0.0/8
+		 Live Restore Enabled: false
+====================================================================================================
+#To check docker is installed perfectly
+syntax: docker run <image_name>  ====> First it will check image present locally or not, if not present it will pull the image and create the container 
+	[root@ip-172-31-80-214 ec2-user]# docker run hello-world
+		Unable to find image 'hello-world:latest' locally
+		latest: Pulling from library/hello-world
+		4f55086f7dd0: Pull complete
+		Digest: sha256:452a468a4bf985040037cb6d5392410206e47db9bf5b7278d281f94d1c2d0931
+		Status: Downloaded newer image for hello-world:latest
+
+		Hello from Docker!
+		This message shows that your installation appears to be working correctly.
+
+		To generate this message, Docker took the following steps:
+		 1. The Docker client contacted the Docker daemon.
+		 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+			(amd64)
+		 3. The Docker daemon created a new container from that image which runs the
+			executable that produces the output you are currently reading.
+		 4. The Docker daemon streamed that output to the Docker client, which sent it
+			to your terminal.
+
+		To try something more ambitious, you can run an Ubuntu container with:
+		 $ docker run -it ubuntu bash
+
+		Share images, automate workflows, and more with a free Docker ID:
+		 https://hub.docker.com/
+
+		For more examples and ideas, visit:
+		 https://docs.docker.com/get-started/
+		 
+Explanation:
+		What Happens When You Run It
+			.	Docker looks for the hello-world image locally.
+
+			.	If it’s not found, Docker pulls it from Docker Hub.
+
+			.	A container is created and started from that image.
+
+			.	The container runs a small program that prints a confirmation message and exits.
+====================================================================================================
+#To check Docker images 	
+	[root@ip-172-31-80-214 ec2-user]# docker images
+		REPOSITORY    TAG       IMAGE ID       CREATED      SIZE
+		hello-world   latest    e2ac70e7319a   5 days ago   10.1kB
+	[root@ip-172-31-80-214 ec2-user]# docker image ls
+		REPOSITORY    TAG       IMAGE ID       CREATED      SIZE
+		hello-world   latest    e2ac70e7319a   5 days ago   10.1kB
+====================================================================================================
+#Pull the image from Docker hub
+Syntax: docker pull <image_name>:<tag>
+	[root@ip-172-31-80-214 ec2-user]# docker pull nginx:stable-alpine-perl
+		stable-alpine-perl: Pulling from library/nginx
+		589002ba0eae: Pull complete
+		1d9cbdb003be: Pull complete
+		e914c6e98e37: Pull complete
+		d631a49fb4f7: Pull complete
+		8f7c784e2471: Pull complete
+		44fa0a5a779f: Pull complete
+		98104829f3fe: Pull complete
+		0151c82f84a9: Pull complete
+		e7196577cea9: Pull complete
+		Digest: sha256:84885adffd682b5bfffc4b84f629efc60c4003e2784af5bedb68bece85babc01
+		Status: Downloaded newer image for nginx:stable-alpine-perl
+		docker.io/library/nginx:stable-alpine-perl
+		
+Explanation:
+		This will:
+
+		Download the stable NGINX release.
+
+		Use the Alpine Linux base image (lightweight, small footprint).
+
+		Include Perl module support
+		nginx:stable-alpine-perl ===> Image_name:Tag
+====================================================================================================
+#To create a tag for image and push that image to docker hub
+	[root@ip-172-31-80-214 ec2-user]# docker images
+		REPOSITORY    TAG                  IMAGE ID       CREATED      SIZE
+		nginx         stable-alpine-perl   00f33393259f   4 days ago   103MB
+		hello-world   latest               e2ac70e7319a   5 days ago   10.1kB
+Syntax: docker tag <image_name>:<tag> <New Image_Name>:<tag>
+	[root@ip-172-31-80-214 ec2-user]# docker tag nginx:stable-alpine-perl yndurgarao1/nginx_ynd:0.1
+	[root@ip-172-31-80-214 ec2-user]# docker images
+		REPOSITORY              TAG                  IMAGE ID       CREATED      SIZE
+		nginx                   stable-alpine-perl   00f33393259f   4 days ago   103MB
+		yndurgarao1/nginx_ynd   0.1                  00f33393259f   4 days ago   103MB
+		hello-world             latest               e2ac70e7319a   5 days ago   10.1kB
+Syntax: docker push <Docker Username>/<Image_Name>:<Tag>
+	[root@ip-172-31-80-214 ec2-user]# docker push yndurgarao1/nginx_ynd:0.1
+		The push refers to repository [docker.io/yndurgarao1/nginx_ynd]
+		74b507ec1cbd: Mounted from library/nginx
+		f76f397f2ce6: Mounted from library/nginx
+		53c769b49ca0: Mounted from library/nginx
+		42608b42cb5e: Mounted from library/nginx
+		a3446cc6c821: Mounted from library/nginx
+		9e707aa6db47: Mounted from library/nginx
+		47a53288c3ef: Mounted from library/nginx
+		a2738b08d711: Mounted from library/nginx
+		989e799e6349: Mounted from library/nginx
+		0.1: digest: sha256:cf7a61b3876ee0fc091e9f8584f800fb55f50f0d8c012c5ce2bb571b3ad5ab72 size: 2201
+====================================================================================================
+#To create container
+Syntax: docker run -dit --name <Container_Name> -p <Container_Port>:<Actual_Application_Port> <Image_name>:<Tag>
+	[root@ip-172-31-80-214 ec2-user]# docker run -dit --name nginx_container -p 2626:80 yndurgarao1/nginx_ynd:0.1
+		5fd84b767fc82abcbfa0d3a5503ebba3fb1a6d3c64afa8697eb18865c4c06891
+	Explanation:
+		docker run → starts a new container.
+
+		-dit → runs in detached mode (-d), interactive (-i), with a pseudo-TTY (-t).
+
+		--name nginx_container → assigns the container a custom name.
+
+		-p 2626:80 → maps host port 2626 → container port 80 (HTTP).
+
+		yndurgarao1/nginx_ynd:0.1 → the image you’re running.
+======================================================================================================
+#How to check running containers
+	[root@ip-172-31-80-214 ec2-user]# docker ps
+		CONTAINER ID   IMAGE                       COMMAND                  CREATED              STATUS              PORTS                                   NAMES
+		5fd84b767fc8   yndurgarao1/nginx_ynd:0.1   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:2626->80/tcp, :::2626->80/tcp   nginx_container
+======================================================================================================
+How to check all containers [ running /pause/ stopped ]
+	[root@ip-172-31-80-214 ec2-user]# docker ps -a
+		CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS                      PORTS                                   NAMES
+		5fd84b767fc8   yndurgarao1/nginx_ynd:0.1   "/docker-entrypoint.…"   2 minutes ago    Up 2 minutes                0.0.0.0:2626->80/tcp, :::2626->80/tcp   nginx_container
+		edcae7438ffe   hello-world                 "/hello"                 28 minutes ago   Exited (0) 28 minutes ago                                           awesome_mclaren
+======================================================================================================
+To Pause and unpause container
+Syntax: docker pause <Contaner_ID or Container_Name>
+	[root@ip-172-31-80-214 ec2-user]# docker pause nginx_container
+		nginx_container
+	[root@ip-172-31-80-214 ec2-user]# docker ps -a
+		CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS                      PORTS                                   NAMES
+		5fd84b767fc8   yndurgarao1/nginx_ynd:0.1   "/docker-entrypoint.…"   3 minutes ago    Up 3 minutes (Paused)       0.0.0.0:2626->80/tcp, :::2626->80/tcp   nginx_container
+		edcae7438ffe   hello-world                 "/hello"                 30 minutes ago   Exited (0) 30 minutes ago                                           awesome_mclaren
+Syntax:	docker unpause <Container_name or Container_ID>
+	[root@ip-172-31-80-214 ec2-user]# docker unpause nginx_container
+		nginx_container
+======================================================================================================
+#To remove all containers
+	[root@ip-172-31-80-214 ec2-user]# docker rm $(docker ps -aq)
+		5fd84b767fc8
+		edcae7438ffe
+===================================================================================================
+#To delete all unused images 
+	[root@ip-172-31-80-214 ec2-user]# docker rmi $(docker images -q)
+#To delete all images forcefully
+	[root@ip-172-31-80-214 ec2-user]# docker rmi -f $(docker images -q)
+===============================================================================================
+#commit the changes in Docker container and create a new image on top of that changes
+	[root@ip-172-31-91-168 ec2-user]# docker run -dit --name ubuntu_container ubuntu:latest
+		6d885ba5dfbe6a43faa5986275d890aa3393ddef19ee7360dd61ff9b6348696d
+	[root@ip-172-31-91-168 ec2-user]# docker ps
+		CONTAINER ID   IMAGE           COMMAND       CREATED         STATUS         PORTS     NAMES
+		6d885ba5dfbe   ubuntu:latest   "/bin/bash"   3 seconds ago   Up 2 seconds             ubuntu_container
+	[root@ip-172-31-91-168 ec2-user]# docker exec -it ubuntu_container bash
+		root@6d885ba5dfbe:/# apt-get update
+			Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+			Get:2 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+			Get:3 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+			Get:4 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+			Get:5 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+			Get:6 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+			Get:7 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+			Get:8 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+			Get:9 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [3601 kB]
+			Get:10 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2155 kB]
+			Get:11 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [38.1 kB]
+			Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [2334 kB]
+			Get:13 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [695 B]
+			Get:14 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.1 kB]
+			Get:15 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.5 kB]
+			Get:16 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [34.8 kB]
+			Get:17 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1954 kB]
+			Get:18 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1504 kB]
+			Get:19 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [3429 kB]
+			Fetched 37.3 MB in 1s (27.8 MB/s)
+			Reading package lists... Done
+		root@6d885ba5dfbe:/# apt-get install nginx
+			Reading package lists... Done
+			Building dependency tree... Done
+			Reading state information... Done
+			The following additional packages will be installed:
+			  iproute2 libatm1t64 libbpf1 libcap2-bin libelf1t64 libmnl0 libpam-cap libxtables12 nginx-common
+			Suggested packages:
+			  iproute2-doc python3:any fcgiwrap nginx-doc ssl-cert
+			The following NEW packages will be installed:
+			  iproute2 libatm1t64 libbpf1 libcap2-bin libelf1t64 libmnl0 libpam-cap libxtables12 nginx nginx-common
+			0 upgraded, 10 newly installed, 0 to remove and 10 not upgraded.
+			Need to get 2026 kB of archives.
+			After this operation, 5799 kB of additional disk space will be used.
+			Do you want to continue? [Y/n] Y
+			Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libelf1t64 amd64 0.190-1.1ubuntu0.1 [57.8 kB]
+			Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 libbpf1 amd64 1:1.3.0-2build2 [166 kB]
+			Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 libmnl0 amd64 1.0.5-2build1 [12.3 kB]
+			Get:4 http://archive.ubuntu.com/ubuntu noble/main amd64 libxtables12 amd64 1.8.10-3ubuntu2 [35.7 kB]
+			Get:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcap2-bin amd64 1:2.66-5ubuntu2.2 [34.2 kB]
+			Get:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 iproute2 amd64 6.1.0-1ubuntu6.2 [1120 kB]
+			Get:7 http://archive.ubuntu.com/ubuntu noble/main amd64 libatm1t64 amd64 1:2.5.1-5.1build1 [22.9 kB]
+			Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpam-cap amd64 1:2.66-5ubuntu2.2 [12.5 kB]
+			Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx-common all 1.24.0-2ubuntu7.6 [43.5 kB]
+			Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx amd64 1.24.0-2ubuntu7.6 [521 kB]
+			Fetched 2026 kB in 0s (12.5 MB/s)
+			debconf: delaying package configuration, since apt-utils is not installed
+			Selecting previously unselected package libelf1t64:amd64.
+			(Reading database ... 8558 files and directories currently installed.)
+			Preparing to unpack .../0-libelf1t64_0.190-1.1ubuntu0.1_amd64.deb ...
+			Unpacking libelf1t64:amd64 (0.190-1.1ubuntu0.1) ...
+			Selecting previously unselected package libbpf1:amd64.
+			Preparing to unpack .../1-libbpf1_1%3a1.3.0-2build2_amd64.deb ...
+			Unpacking libbpf1:amd64 (1:1.3.0-2build2) ...
+			Selecting previously unselected package libmnl0:amd64.
+			Preparing to unpack .../2-libmnl0_1.0.5-2build1_amd64.deb ...
+			Unpacking libmnl0:amd64 (1.0.5-2build1) ...
+			Selecting previously unselected package libxtables12:amd64.
+			Preparing to unpack .../3-libxtables12_1.8.10-3ubuntu2_amd64.deb ...
+			Unpacking libxtables12:amd64 (1.8.10-3ubuntu2) ...
+			Selecting previously unselected package libcap2-bin.
+			Preparing to unpack .../4-libcap2-bin_1%3a2.66-5ubuntu2.2_amd64.deb ...
+			Unpacking libcap2-bin (1:2.66-5ubuntu2.2) ...
+			Selecting previously unselected package iproute2.
+			Preparing to unpack .../5-iproute2_6.1.0-1ubuntu6.2_amd64.deb ...
+			Unpacking iproute2 (6.1.0-1ubuntu6.2) ...
+			Selecting previously unselected package libatm1t64:amd64.
+			Preparing to unpack .../6-libatm1t64_1%3a2.5.1-5.1build1_amd64.deb ...
+			Unpacking libatm1t64:amd64 (1:2.5.1-5.1build1) ...
+			Selecting previously unselected package libpam-cap:amd64.
+			Preparing to unpack .../7-libpam-cap_1%3a2.66-5ubuntu2.2_amd64.deb ...
+			Unpacking libpam-cap:amd64 (1:2.66-5ubuntu2.2) ...
+			Selecting previously unselected package nginx-common.
+			Preparing to unpack .../8-nginx-common_1.24.0-2ubuntu7.6_all.deb ...
+			Unpacking nginx-common (1.24.0-2ubuntu7.6) ...
+			Selecting previously unselected package nginx.
+			Preparing to unpack .../9-nginx_1.24.0-2ubuntu7.6_amd64.deb ...
+			Unpacking nginx (1.24.0-2ubuntu7.6) ...
+			Setting up libatm1t64:amd64 (1:2.5.1-5.1build1) ...
+			Setting up nginx-common (1.24.0-2ubuntu7.6) ...
+			debconf: unable to initialize frontend: Dialog
+			debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79.)
+			debconf: falling back to frontend: Readline
+			Setting up libelf1t64:amd64 (0.190-1.1ubuntu0.1) ...
+			Setting up libcap2-bin (1:2.66-5ubuntu2.2) ...
+			Setting up libmnl0:amd64 (1.0.5-2build1) ...
+			Setting up libxtables12:amd64 (1.8.10-3ubuntu2) ...
+			Setting up libpam-cap:amd64 (1:2.66-5ubuntu2.2) ...
+			debconf: unable to initialize frontend: Dialog
+			debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79.)
+			debconf: falling back to frontend: Readline
+			Setting up libbpf1:amd64 (1:1.3.0-2build2) ...
+			Setting up iproute2 (6.1.0-1ubuntu6.2) ...
+			debconf: unable to initialize frontend: Dialog
+			debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79.)
+			debconf: falling back to frontend: Readline
+			Setting up nginx (1.24.0-2ubuntu7.6) ...
+			invoke-rc.d: could not determine current runlevel
+			invoke-rc.d: policy-rc.d denied execution of start.
+			Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+		root@6d885ba5dfbe:/# service nginx status
+			* nginx is not running
+		root@6d885ba5dfbe:/# service nginx start
+			* Starting nginx nginx                                                                                                            
+Syntax:	docker commit <Container_name or Container id> <Docker username>/<New_Image_Name:Tag>  ===> Commit the container
+	[root@ip-172-31-91-168 ec2-user]# docker commit ubuntu_container yndurgarao1/ubuntu_git:0.1
+		sha256:ebcbcbc0a8d3ca676d14d0a3312ccf1a45115293087cb1c21431b59402292abf
+	[root@ip-172-31-91-168 ec2-user]# docker image ls
+		REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
+		yndurgarao1/ubuntu_git   0.1       ebcbcbc0a8d3   5 seconds ago   228MB
+		ubuntu                   latest    f794f40ddfff   4 weeks ago     78.1MB
+	[root@ip-172-31-91-168 ec2-user]# docker run -dit --name ubuntu_container1 -p 5555:80 yndurgarao1/ubuntu_git:0.1
+		b98a76f7c8f6f61871834234dd4c0fdcc7656808856366840490440f9a178546
+	[root@ip-172-31-91-168 ec2-user]# docker exec -it ubuntu_container1 bash
+		root@b98a76f7c8f6:/# service nginx status
+			* nginx is not running
+		root@b98a76f7c8f6:/# service nginx start
+		* Starting nginx nginx                                                                                                                    [ OK ]
+===============================================================================================
+#How to Delete multiple containers [ running / stooped /paused state ] by forcefully
+	[root@ip-172-31-91-168 ec2-user]# docker ps --all
+		CONTAINER ID   IMAGE                        COMMAND       CREATED          STATUS                     PORTS                                   NAMES
+		d6abab75e69d   hello-world                  "/hello"      8 seconds ago    Exited (0) 6 seconds ago                                           interesting_kowalevski
+		b98a76f7c8f6   yndurgarao1/ubuntu_git:0.1   "/bin/bash"   14 minutes ago   Up 14 minutes (Paused)     0.0.0.0:5555->80/tcp, :::5555->80/tcp   ubuntu_container1
+		6d885ba5dfbe   ubuntu:latest                "/bin/bash"   22 minutes ago   Up 22 minutes                                                      ubuntu_container
+	[root@ip-172-31-91-168 ec2-user]# docker rm -f $(docker ps -aq)
+		d6abab75e69d
+		b98a76f7c8f6
+		6d885ba5dfbe
+#How to Delete stopped containers
+	[root@ip-172-31-91-168 ec2-user]# docker ps -a
+		CONTAINER ID   IMAGE           COMMAND       CREATED              STATUS                          PORTS     NAMES
+		60a2f940a920   ubuntu:latest   "/bin/bash"   50 seconds ago       Up 49 seconds                             ubuntu_container
+		9e5afc3386eb   hello-world     "/hello"      About a minute ago   Exited (0) About a minute ago             nice_herschel
+	[root@ip-172-31-91-168 ec2-user]# docker rm $(docker ps -aq)
+		9e5afc3386eb
+		Error response from daemon: cannot remove container "/ubuntu_container": container is running: stop the container before removing or force remove
+==============================================================================================================
+#How to delete multiple images which are unused
+	[root@ip-172-31-91-168 ec2-user]# docker rmi $(docker images -q)
+		Untagged: yndurgarao1/ubuntu_git:0.1
+		Deleted: sha256:ebcbcbc0a8d3ca676d14d0a3312ccf1a45115293087cb1c21431b59402292abf
+		Deleted: sha256:1a64aea01bd19207ef53e6c9c4d2937f487d1d92f8f4231deb1334c9ebb0be9f
+		Untagged: hello-world:latest
+		Untagged: hello-world@sha256:452a468a4bf985040037cb6d5392410206e47db9bf5b7278d281f94d1c2d0931
+		Deleted: sha256:e2ac70e7319a02c5a477f5825259bd118b94e8b02c279c67afa63adab6d8685b
+		Deleted: sha256:897b3f2a7c1bc2f3d02432f7892fe31c6272c521ad4d70257df624504a3238b4
+		Untagged: ubuntu:latest
+		Untagged: ubuntu@sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c
+		Deleted: sha256:f794f40ddfff5af8ef1b39ee29eab3b5400ea70b9ebefd286812dbbe0054ad6b
+		Deleted: sha256:f2a7f072635332d307212e318e07284948b89f4167fce5c4d7c9cfb7590b74b6
+	[root@ip-172-31-91-168 ec2-user]# docker image ls
+		REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+===========================================================================================================
+#Volumes
+	[root@ip-172-31-91-168 ec2-user]# docker volume ls
+		DRIVER    VOLUME NAME
+	[root@ip-172-31-91-168 ec2-user]# docker volume create volume1_ynd
+		volume1_ynd
+	[root@ip-172-31-91-168 ec2-user]# docker volume ls
+		DRIVER    VOLUME NAME
+		local     volume1_ynd
+=========================================================================================================
+#Attach volume to container 
+	[root@ip-172-31-91-168 ec2-user]# docker run -dit --name volume_attach -v volume1_ynd:/ynd ubuntu:latest
+		Unable to find image 'ubuntu:latest' locally
+		latest: Pulling from library/ubuntu
+		817807f3c64e: Pull complete
+		Digest: sha256:186072bba1b2f436cbb91ef2567abca677337cfc786c86e107d25b7072feef0c
+		Status: Downloaded newer image for ubuntu:latest
+		b9b02e11a44f330d22c20cc460cbd83509792b91934a5147f331d3369fdd311f
+	[root@ip-172-31-91-168 ec2-user]# docker exec -it volume_attach bash
+		root@b9b02e11a44f:/# ls
+			bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var  ynd
+		root@b9b02e11a44f:/#
+===========================================================================================================
+#Deleting volume 
+	[root@ip-172-31-91-168 ec2-user]# docker volume ls
+		DRIVER    VOLUME NAME
+		local     volume1_ynd
+	[root@ip-172-31-91-168 ec2-user]# docker volume rm volume1_ynd
+		volume1_ynd
+===========================================================================================================
+#Docker file
+	[root@ip-172-31-77-131 ~]# cat Dockerfile
+	# Use Ubuntu as the base image
+		FROM ubuntu:20.04
+	**************************************************************************************
+	[root@ip-172-31-77-131 ~]# cat Dockerfile
+	# Use Alpine Linux (very small image)
+		FROM alpine:3.18
+	[root@ip-172-31-77-131 ~]#
+	**************************************************************************************
+Syntax: docker build -t <Image_name>:<Tag> .
+Syntax: docker build -t <Image_Name>:<Tag> -f <Dockerfile_name> .
+	
+	[root@ip-172-31-77-131 ~]# docker build -t yndurgarao1/imagefile1:1.0 .
+	[root@ip-172-31-77-131 ~]# docker build -t yndurgarao1/image1:0.1 -f dockerfile_ubuntu .
+	[root@ip-172-31-77-131 ~]# cat Dockerfile
+		# Start with a base image
+		FROM ubuntu:20.04
+		# Add metadata about the image
+		LABEL maintainer="Kadali <kadali@example.com>"
+		LABEL version="1.0"
+		LABEL description="This image sets up a basic Ubuntu environment with curl installed."
+	[root@ip-172-31-77-131 ~]#
+	**************************************************************************************
+	[root@ip-172-31-77-131 ~]# cat Dockerfile
+		# Base image
+		FROM ubuntu:20.04
+
+		# Add metadata about the image
+		LABEL maintainer="Kadali <kadali@example.com>" \
+			  version="1.0" \
+			  description="Example Dockerfile using FROM, LABEL, and RUN instructions."
+
+		# Execute commands inside the image during build
+		RUN apt-get update && apt-get install -y curl
+	**************************************************************************************
+		[root@ip-172-31-77-131 ~]# cat DockerfileFROM ubuntu:20.04
+
+		LABEL maintainer="Kadali <kadali@example.com>" \
+			  description="Example showing WORKDIR usage"
+
+		# Set working directory
+		WORKDIR /app
+
+		# Copy files into /app
+		COPY . .
+
+		# Run commands inside /app
+		RUN echo "Hello from WORKDIR" > message.txt
+
+		CMD ["cat", "message.txt"]
+	**************************************************************************************
+================================================================================================
+Docker Commands:
+   33  docker inspect nginx		===> to get the details about nginx image 
+   34  docker login				===> To autheticate for docker hub it will prompt username and password please provide the require ddetails to login
+   37  docker tag nginx:latest yndurgarao1/nginx_ynd:0.1  ===> to create a new tag with personal docker hub username
+   40  docker push yndurgarao1/nginx_ynd:0.1			  ===> to push the image to docker hub 
+   41  docker run -dit --name nginx_container yndurgarao1/nginx_ynd:0.1  ===> to create nginx container
+   43  docker stop nginx_container  ===> to stop running container 
+   44  docker rm nginx_container	===> To remove stopped container
+   45  docker run -dit --name ynd_nginx_Container -p 3000:80 yndurgarao1/nginx_ynd:0.1  ===> to create nginx container with port mapping
+   50  docker exec -it ynd_nginx_Container bash 	===> to login to docker container 
+   53  docker inspect ynd_nginx_Container  			===> to get container details 
+   57  docker network ls	===> To list docker network 
+   64  docker volume ls		===> to lst docker volumes
+   65  docker volume --help ===> to get more information on volume 
+   66  docker volume create ynd_volume1		===> to create docker volume  
+   75  docker run -dit --name ynd_volume_container -p 3000:80 -v ynd_volume1:/ynd nginx:latest  ===> To create container with attachng volume and port
+   76  docker exec -it ynd_volume_container bash   ===> to login to cotainer
+   82  docker rm -f ynd_volume_container  	===> to remove running container
+   88  docker volume rm ynd_volume1			===> To remove docker volume 
+   94  docker network create ynd_network
+# To commit the changes in container 
+  95   docker run -dit --name commit_container -p 3400:80 --network ynd_network nginx:latest  ===> to create docker container with docker network 
+  105  docker exec -it commit_container bash
+  106  docker pull ubuntu:latest
+  107  docker run -dit --name ubuntu_cont ubuntu:latest
+  108  docker exec -it ubuntu_cont bash
+  109  # yum install -y git
+  110  docker commit ubuntu_cont yndurgarao1/ubuntu:1.0
+  111  docker push yndurgarao1/ubuntu:1.0
+===================================================
+
+
+

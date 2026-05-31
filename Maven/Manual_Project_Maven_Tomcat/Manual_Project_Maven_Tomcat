@@ -1,0 +1,661 @@
+#Manual Project : To Copy the war file to Tomcat Server.
+#In First EC2 Instance we will install Java-17, Git, Maven and after that we will clone the Java Project frm Github
+#In Second EC2 Instance we will install java-17 and Tomcat server.
+***********************************************************************************************************
+***********************************************************************************************************
+In First EC2 Instance:
+#Java Installation:
+	[root@ip-10-20-25-67 ec2-user]#yum install -y java-17 
+
+#Git Installation:
+	[root@ip-10-20-25-67 ec2-user]#yum install -y git
+
+#Maven nstallation:
+	[root@ip-10-20-25-67 ec2-user]#yum install -y maven
+
+***********************************************************************************************************
+
+#Java version check
+	[root@ip-10-20-25-67 ec2-user]# java --version
+		openjdk 17.0.17 2025-10-21 LTS
+		OpenJDK Runtime Environment Corretto-17.0.17.10.1 (build 17.0.17+10-LTS)
+		OpenJDK 64-Bit Server VM Corretto-17.0.17.10.1 (build 17.0.17+10-LTS, mixed mode, sharing)
+
+#git version check[
+	root@ip-10-20-25-67 ec2-user]# git --version
+		git version 2.50.1
+
+#maven verson check
+	[root@ip-10-20-25-67 ec2-user]# mvn --version
+		Apache Maven 3.8.4 (Red Hat 3.8.4-3.amzn2023.0.5)
+		Maven home: /usr/share/maven
+		Java version: 17.0.17, vendor: Amazon.com Inc., runtime: /usr/lib/jvm/java-17-amazon-corretto.x86_64
+		Default locale: en, platform encoding: UTF-8
+		OS name: "linux", version: "6.1.159-182.297.amzn2023.x86_64", arch: "amd64", family: "unix"
+***********************************************************************************************************
+
+#git clone
+	[root@ip-10-20-25-67 ec2-user]# git clone https://github.com/yndrao/java_project.git
+		Cloning into 'java_project'...
+		remote: Enumerating objects: 39, done.
+		remote: Counting objects: 100% (39/39), done.
+		remote: Compressing objects: 100% (23/23), done.
+		remote: Total 39 (delta 3), reused 35 (delta 2), pack-reused 0 (from 0)
+		Receiving objects: 100% (39/39), 4.41 KiB | 4.41 MiB/s, done.
+		Resolving deltas: 100% (3/3), done.
+
+***********************************************************************************************************
+
+#For Maven commands execution we need to navigate to POM.XML file location
+	[root@ip-10-20-25-67 ec2-user]# cd java_project/
+	[root@ip-10-20-25-67 java_project]# ls
+		README.md  pom.xml  src
+	[root@ip-10-20-25-67 java_project]# mvn clean
+		[INFO] Scanning for projects...
+		[INFO]
+		[INFO] -------------------------< in.javahome:myweb >--------------------------
+		[INFO] Building Java Home myweb 8.2.0
+		[INFO] --------------------------------[ war ]---------------------------------
+		[INFO]
+		[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ myweb ---
+		[INFO] Deleting /home/ec2-user/java_project/target
+		[INFO] ------------------------------------------------------------------------
+		[INFO] BUILD SUCCESS
+		[INFO] ------------------------------------------------------------------------
+		[INFO] Total time:  0.138 s
+		[INFO] Finished at: 2026-01-25T01:10:53Z
+		[INFO] ------------------------------------------------------------------------
+#Package the Application
+	[root@ip-10-20-25-67 java_project]# mvn package
+		[INFO] Scanning for projects...
+		[INFO]
+		[INFO] -------------------------< in.javahome:myweb >--------------------------
+		[INFO] Building Java Home myweb 8.2.0
+		[INFO] --------------------------------[ war ]---------------------------------
+		[INFO]
+		[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ myweb ---
+		[INFO] Using 'UTF-8' encoding to copy filtered resources.
+		[INFO] skip non existing resourceDirectory /home/ec2-user/java_project/src/main/resources
+		[INFO]
+		[INFO] --- maven-compiler-plugin:3.10.1:compile (default-compile) @ myweb ---
+		[INFO] Changes detected - recompiling the module!
+		[INFO] Compiling 1 source file to /home/ec2-user/java_project/target/classes
+		[INFO]
+		[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ myweb ---
+		[INFO] Using 'UTF-8' encoding to copy filtered resources.
+		[INFO] skip non existing resourceDirectory /home/ec2-user/java_project/src/test/resources
+		[INFO]
+		[INFO] --- maven-compiler-plugin:3.10.1:testCompile (default-testCompile) @ myweb ---
+		[INFO] Changes detected - recompiling the module!
+		[INFO] Compiling 1 source file to /home/ec2-user/java_project/target/test-classes
+		[INFO]
+		[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ myweb ---
+		[INFO] Surefire report directory: /home/ec2-user/java_project/target/surefire-reports
+
+		-------------------------------------------------------
+		 T E S T S
+		-------------------------------------------------------
+		Running in.javahome.myweb.controller.CalculatorTest
+		Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 sec
+
+		Results :
+
+		Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+		[INFO]
+		[INFO] --- maven-war-plugin:3.3.2:war (default-war) @ myweb ---
+		[INFO] Packaging webapp
+		[INFO] Assembling webapp [myweb] in [/home/ec2-user/java_project/target/myweb-8.2.0]
+		[INFO] Processing war project
+		[INFO] Copying webapp resources [/home/ec2-user/java_project/src/main/webapp]
+		[INFO] Building war: /home/ec2-user/java_project/target/myweb-8.2.0.war
+		[INFO] ------------------------------------------------------------------------
+		[INFO] BUILD SUCCESS
+		[INFO] ------------------------------------------------------------------------
+		[INFO] Total time:  1.225 s
+		[INFO] Finished at: 2026-01-25T01:11:52Z
+		[INFO] ------------------------------------------------------------------------
+		[root@ip-10-20-25-67 java_project]#
+
+	[root@ip-10-20-25-67 java_project]# ls
+		README.md  pom.xml  src  target
+	
+	[root@ip-10-20-25-67 target]# ls
+		classes            generated-test-sources  maven-status  myweb-8.2.0.war   test-classes
+		generated-sources  maven-archiver          myweb-8.2.0   surefire-reports
+	[root@ip-10-20-25-67 target]# pwd
+		/home/ec2-user/java_project/target
+
+***********************************************************************************************************
+
+#To access the applicaton by end user we need to copy the war file to Tomcat server for that ssh confguration
+	[root@ip-10-20-25-67 target]# vi /tmp/tokyo.pem
+	[root@ip-10-20-25-67 target]# chmod 600 /tmp/tokyo.pem
+	
+***********************************************************************************************************
+**************************************************************************************************************
+
+#Second EC2 Instance tomcat server setup
+	[root@ip-10-20-25-151 ec2-user]#yum install -y java-17
+	[root@ip-10-20-25-151 ec2-user]# java --version
+		openjdk 17.0.17 2025-10-21 LTS
+		OpenJDK Runtime Environment Corretto-17.0.17.10.1 (build 17.0.17+10-LTS)
+		OpenJDK 64-Bit Server VM Corretto-17.0.17.10.1 (build 17.0.17+10-LTS, mixed mode, sharing)
+**************************************************************************************************************
+
+In Browser open the URL: https://tomcat.apache.org/
+	Under Download option select Tomcat required version and copy the required version URL
+		https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz
+		
+**************************************************************************************************************
+	
+	[root@ip-10-20-25-151 ec2-user]# sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz
+		--2026-01-25 01:32:20--  https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz
+		Resolving dlcdn.apache.org (dlcdn.apache.org)... 151.101.2.132, 2a04:4e42::644
+		Connecting to dlcdn.apache.org (dlcdn.apache.org)|151.101.2.132|:443... connected.
+		HTTP request sent, awaiting response... 200 OK
+		Length: 13072656 (12M) [application/x-gzip]
+		Saving to: ‘apache-tomcat-9.0.115.tar.gz’
+
+		apache-tomcat-9.0.115.tar.gz      100%[============================================================>]  12.47M  75.2MB/s    in 0.2s
+
+		2026-01-25 01:32:20 (75.2 MB/s) - ‘apache-tomcat-9.0.115.tar.gz’ saved [13072656/13072656]
+
+#untar the file
+	[root@ip-10-20-25-151 ec2-user]#tar -xvf apache-tomcat-9.0.115.tar.gz
+
+#Navigating to Tomcat Directory
+	[root@ip-10-20-25-151 ec2-user]# cd apache-tomcat-9.0.115/
+
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# ls
+		BUILDING.txt  CONTRIBUTING.md  LICENSE  NOTICE  README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  temp  webapps  work
+
+	[root@ip-10-20-25-151 META-INF]# pwd
+		/home/ec2-user/apache-tomcat-9.0.115/webapps/manager/META-INF
+
+#To provide security to tomcat we are removing loop back addres line context.xml file
+	[root@ip-10-20-25-151 META-INF]# cat context.xml
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!--
+		  Licensed to the Apache Software Foundation (ASF) under one or more
+		  contributor license agreements.  See the NOTICE file distributed with
+		  this work for additional information regarding copyright ownership.
+		  The ASF licenses this file to You under the Apache License, Version 2.0
+		  (the "License"); you may not use this file except in compliance with
+		  the License.  You may obtain a copy of the License at
+
+			  http://www.apache.org/licenses/LICENSE-2.0
+
+		  Unless required by applicable law or agreed to in writing, software
+		  distributed under the License is distributed on an "AS IS" BASIS,
+		  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		  See the License for the specific language governing permissions and
+		  limitations under the License.
+		-->
+		<Context antiResourceLocking="false" privileged="true" >
+		  <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+						   sameSiteCookies="strict" />
+		  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"
+				 allow="127.0.0.0/8,::1/128" />
+		  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
+		</Context>
+-----------------------------------------------------------------------------------------------------
+	[root@ip-10-20-25-151 META-INF]# vi context.xml
+			[ Delete the look back address line ]
+
+	[root@ip-10-20-25-151 META-INF]# cat context.xml
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!--
+		  Licensed to the Apache Software Foundation (ASF) under one or more
+		  contributor license agreements.  See the NOTICE file distributed with
+		  this work for additional information regarding copyright ownership.
+		  The ASF licenses this file to You under the Apache License, Version 2.0
+		  (the "License"); you may not use this file except in compliance with
+		  the License.  You may obtain a copy of the License at
+
+			  http://www.apache.org/licenses/LICENSE-2.0
+
+		  Unless required by applicable law or agreed to in writing, software
+		  distributed under the License is distributed on an "AS IS" BASIS,
+		  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		  See the License for the specific language governing permissions and
+		  limitations under the License.
+		-->
+		<Context antiResourceLocking="false" privileged="true" >
+		  <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+						   sameSiteCookies="strict" />
+		  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
+		</Context>
+
+**************************************************************************************************************
+
+#To start or Stop Tomcat Server location
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# cd bin
+	
+	root@ip-10-20-25-151 bin]# pwd
+		/home/ec2-user/apache-tomcat-9.0.115/bin
+	
+	[root@ip-10-20-25-151 bin]# ls
+		bootstrap.jar       ciphers.sh                    daemon.sh     setclasspath.bat  startup.sh            version.bat
+		catalina-tasks.xml  commons-daemon-native.tar.gz  digest.bat    setclasspath.sh   tomcat-juli.jar       version.sh
+		catalina.bat        commons-daemon.jar            digest.sh     shutdown.bat      tomcat-native.tar.gz
+		catalina.sh         configtest.bat                makebase.bat  shutdown.sh       tool-wrapper.bat
+		ciphers.bat         configtest.sh  
+	
+	[root@ip-10-20-25-151 bin]# ./shutdown.sh
+	
+	[root@ip-10-20-25-151 bin]# ./startup.sh
+	
+**************************************************************************************************************
+
+#To check Tomact port is running or not [ Tomcat Default Port : 8080 ]
+	[root@ip-10-20-25-151 bin]# netstat -ntlp
+		Active Internet connections (only servers)
+		Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+		tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      2340/sshd: /usr/sbi
+		tcp6       0      0 :::22                   :::*                    LISTEN      2340/sshd: /usr/sbi
+		tcp6       0      0 :::8080                 :::*                    LISTEN      27645/java
+		tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      27645/java
+-----------------------------------------------------------------------------------------------------------------------
+#I need to transfer war file genarated in target folder in my first EC2 Instance to Tomcat server in webapps folder 
+#In Second EC2 Instance I am providing full permision to webapps folder
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# pwd
+		/home/ec2-user/apache-tomcat-9.0.115
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# chmod 777 webapps/
+
+*******************************************************************************************************************************	
+
+#In First EC2 Instance for file to transfer to second EC2 Instance(Tomcat Server) in first EC2 Instance: 
+	[root@ip-10-20-25-67 target]# pwd
+		/home/ec2-user/java_project/target
+	
+	[root@ip-10-20-25-67 target]# ls
+		classes  generated-test-sources  maven-status  myweb-8.2.0.war   test-classes
+		generated-sources  maven-archiver          myweb-8.2.0   surefire-reports
+	
+	[root@ip-10-20-25-67 target]# scp -i /tmp/tokyo.pem myweb-8.2.0.war ec2-user@52.195.234.110:/home/ec2-user/apache-tomcat-9.0.115/webapps
+		The authenticity of host '52.195.234.110 (52.195.234.110)' can't be established.
+		ED25519 key fingerprint is SHA256:GmF7QbWh/t4k+K33UERJDDm8UGpQjP00Fkr8euwHTSs.
+		This key is not known by any other names
+		Are you sure you want to continue connecting (yes/no/[fingerprint])? [Yes/No] ---> Yes for connection, No for abort 
+		Warning: Permanently added '52.195.234.110' (ED25519) to the list of known hosts.
+		myweb-8.2.0.war                                                                                      100% 3143     6.5MB/s   00:00
+	
+	[root@ip-10-20-25-67 target]#
+
+************************************************************************************************************************************
+
+#In Second EC2 Instance once war file copied to webapps folder, restart tomcat service 
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# pwd
+		/home/ec2-user/apache-tomcat-9.0.115
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# ls
+		BUILDING.txt  CONTRIBUTING.md  LICENSE  NOTICE  README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  temp  webapps  work
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# cd bin
+	
+	[root@ip-10-20-25-151 bin]# ls
+		bootstrap.jar       ciphers.sh                    daemon.sh     setclasspath.bat  startup.sh            version.bat
+		catalina-tasks.xml  commons-daemon-native.tar.gz  digest.bat    setclasspath.sh   tomcat-juli.jar       version.sh
+		catalina.bat        commons-daemon.jar            digest.sh     shutdown.bat      tomcat-native.tar.gz
+		catalina.sh         configtest.bat                makebase.bat  shutdown.sh       tool-wrapper.bat
+		ciphers.bat         configtest.sh                 makebase.sh   startup.bat       tool-wrapper.sh
+	
+	[root@ip-10-20-25-151 bin]# ./startup.sh
+
+--------------------------------------------------------------------------------------------------------------------
+
+#How to add user in Tomcat
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# ls
+		BUILDING.txt  CONTRIBUTING.md  LICENSE  NOTICE  README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  temp  webapps  work
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# cd conf/
+	
+	[root@ip-10-20-25-151 conf]# ls
+		Catalina         catalina.properties  jaspic-providers.xml  logging.properties  tomcat-users.xml  web.xml
+		catalina.policy  context.xml          jaspic-providers.xsd  server.xml          tomcat-users.xsd
+	
+	[root@ip-10-20-25-151 conf]#cat tomcat-users.xml
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!--
+		  Licensed to the Apache Software Foundation (ASF) under one or more
+		  contributor license agreements.  See the NOTICE file distributed with
+		  this work for additional information regarding copyright ownership.
+		  The ASF licenses this file to You under the Apache License, Version 2.0
+		  (the "License"); you may not use this file except in compliance with
+		  the License.  You may obtain a copy of the License at
+
+			  http://www.apache.org/licenses/LICENSE-2.0
+
+		  Unless required by applicable law or agreed to in writing, software
+		  distributed under the License is distributed on an "AS IS" BASIS,
+		  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		  See the License for the specific language governing permissions and
+		  limitations under the License.
+		-->
+		<tomcat-users xmlns="http://tomcat.apache.org/xml"
+					  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					  xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+					  version="1.0">
+		<!--
+		  By default, no user is included in the "manager-gui" role required
+		  to operate the "/manager/html" web application.  If you wish to use this app,
+		  you must define such a user - the username and password are arbitrary.
+
+		  Built-in Tomcat manager roles:
+			- manager-gui    - allows access to the HTML GUI and the status pages
+			- manager-script - allows access to the HTTP API and the status pages
+			- manager-jmx    - allows access to the JMX proxy and the status pages
+			- manager-status - allows access to the status pages only
+
+		  The users below are wrapped in a comment and are therefore ignored. If you
+		  wish to configure one or more of these users for use with the manager web
+		  application, do not forget to remove the <!.. ..> that surrounds them. You
+		  will also need to set the passwords to something appropriate.
+		-->
+		<!--
+		  <user username="admin" password="<must-be-changed>" roles="manager-gui"/>
+		  <user username="robot" password="<must-be-changed>" roles="manager-script"/>
+		-->
+		<!--
+		  The sample user and role entries below are intended for use with the
+		  examples web application. They are wrapped in a comment and thus are ignored
+		  when reading this file. If you wish to configure these users for use with the
+		  examples web application, do not forget to remove the <!.. ..> that surrounds
+		  them. You will also need to set the passwords to something appropriate.
+		-->
+		<!--
+		  <role rolename="tomcat"/>
+		  <role rolename="role1"/>
+		  <user username="tomcat" password="<must-be-changed>" roles="tomcat"/>
+		  <user username="both" password="<must-be-changed>" roles="tomcat,role1"/>
+		  <user username="role1" password="<must-be-changed>" roles="role1"/>
+		-->
+		</tomcat-users>
+----------------------------------------------------------------------------------
+	[root@ip-10-20-25-151 conf]# cat tomcat-users.xml
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!--
+		  Licensed to the Apache Software Foundation (ASF) under one or more
+		  contributor license agreements.  See the NOTICE file distributed with
+		  this work for additional information regarding copyright ownership.
+		  The ASF licenses this file to You under the Apache License, Version 2.0
+		  (the "License"); you may not use this file except in compliance with
+		  the License.  You may obtain a copy of the License at
+
+			  http://www.apache.org/licenses/LICENSE-2.0
+
+		  Unless required by applicable law or agreed to in writing, software
+		  distributed under the License is distributed on an "AS IS" BASIS,
+		  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		  See the License for the specific language governing permissions and
+		  limitations under the License.
+		-->
+		<tomcat-users xmlns="http://tomcat.apache.org/xml"
+					  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					  xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+					  version="1.0">
+		<!--
+		  By default, no user is included in the "manager-gui" role required
+		  to operate the "/manager/html" web application.  If you wish to use this app,
+		  you must define such a user - the username and password are arbitrary.
+
+		  Built-in Tomcat manager roles:
+			- manager-gui    - allows access to the HTML GUI and the status pages
+			- manager-script - allows access to the HTTP API and the status pages
+			- manager-jmx    - allows access to the JMX proxy and the status pages
+			- manager-status - allows access to the status pages only
+
+		  The users below are wrapped in a comment and are therefore ignored. If you
+		  wish to configure one or more of these users for use with the manager web
+		  application, do not forget to remove the <!.. ..> that surrounds them. You
+		  will also need to set the passwords to something appropriate.
+		-->
+		<!--
+		  <user username="admin" password="<must-be-changed>" roles="manager-gui"/>
+		  <user username="robot" password="<must-be-changed>" roles="manager-script"/>
+		-->
+		<!--
+		  The sample user and role entries below are intended for use with the
+		  examples web application. They are wrapped in a comment and thus are ignored
+		  when reading this file. If you wish to configure these users for use with the
+		  examples web application, do not forget to remove the <!.. ..> that surrounds
+		  them. You will also need to set the passwords to something appropriate.
+		-->
+		<!--
+		  <role rolename="tomcat"/>
+		  <role rolename="role1"/>
+		  <user username="tomcat" password="<must-be-changed>" roles="tomcat"/>
+		  <user username="both" password="<must-be-changed>" roles="tomcat,role1"/>
+		  <user username="role1" password="<must-be-changed>" roles="role1"/>
+		-->
+		  <role rolename="manager-gui"/>
+		  <role rolename="manager-script"/>
+		  <user username="durga" password="durga" roles="manager-gui,manager-script"/>
+		  <user username="renuka" password="renuka" roles="manager-gui,manager-script"/>
+		</tomcat-users>
+		
+**************************************************************************************************************
+
+#Restart the tomcat server
+	[root@ip-10-20-25-151 conf]# pwd
+		/home/ec2-user/apache-tomcat-9.0.115/conf
+	
+	[root@ip-10-20-25-151 conf]# cd ..
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]#
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# cd bin
+	
+	[root@ip-10-20-25-151 bin]# pwd
+		home/ec2-user/apache-tomcat-9.0.115/bin
+	
+	[root@ip-10-20-25-151 bin]# ./startup.sh
+
+**************************************************************************************************************
+#How to change the default port for Tomcat Server
+#Default Port 8080
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# ls
+		BUILDING.txt  CONTRIBUTING.md  LICENSE  NOTICE  README.md  RELEASE-NOTES  RUNNING.txt  bin  conf  lib  logs  temp  webapps  work
+	
+	[root@ip-10-20-25-151 apache-tomcat-9.0.115]# cd conf
+	
+	[root@ip-10-20-25-151 conf]# ls
+		Catalina         catalina.properties  jaspic-providers.xml  logging.properties  tomcat-users.xml  web.xml
+		catalina.policy  context.xml          jaspic-providers.xsd  server.xml          tomcat-users.xsd
+	
+	[root@ip-10-20-25-151 conf]# cat server.xml
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!--
+		  Licensed to the Apache Software Foundation (ASF) under one or more
+		  contributor license agreements.  See the NOTICE file distributed with
+		  this work for additional information regarding copyright ownership.
+		  The ASF licenses this file to You under the Apache License, Version 2.0
+		  (the "License"); you may not use this file except in compliance with
+		  the License.  You may obtain a copy of the License at
+
+			  http://www.apache.org/licenses/LICENSE-2.0
+
+		  Unless required by applicable law or agreed to in writing, software
+		  distributed under the License is distributed on an "AS IS" BASIS,
+		  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		  See the License for the specific language governing permissions and
+		  limitations under the License.
+		-->
+		<!-- Note:  A "Server" is not itself a "Container", so you may not
+			 define subcomponents such as "Valves" at this level.
+			 Documentation at /docs/config/server.html
+		 -->
+		<Server port="8005" shutdown="SHUTDOWN">
+		  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+		  <!-- Security listener. Documentation at /docs/config/listeners.html
+		  <Listener className="org.apache.catalina.security.SecurityListener" />
+		  -->
+		  <!-- APR connector and OpenSSL support using Tomcat Native -->
+		  <Listener className="org.apache.catalina.core.AprLifecycleListener" />
+		  <!-- OpenSSL support using FFM API from Java 22 -->
+		  <!-- <Listener className="org.apache.catalina.core.OpenSSLLifecycleListener" /> -->
+		  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+		  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+		  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+		  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+		  <!-- Global JNDI resources
+			   Documentation at /docs/jndi-resources-howto.html
+		  -->
+		  <GlobalNamingResources>
+			<!-- Editable user database that can also be used by
+				 UserDatabaseRealm to authenticate users
+			-->
+			<Resource name="UserDatabase" auth="Container"
+					  type="org.apache.catalina.UserDatabase"
+					  description="User database that can be updated and saved"
+					  factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+					  pathname="conf/tomcat-users.xml" />
+		  </GlobalNamingResources>
+
+		  <!-- A "Service" is a collection of one or more "Connectors" that share
+			   a single "Container" Note:  A "Service" is not itself a "Container",
+			   so you may not define subcomponents such as "Valves" at this level.
+			   Documentation at /docs/config/service.html
+		   -->
+		  <Service name="Catalina">
+
+			<!--The connectors can use a shared executor, you can define one or more named thread pools-->
+			<!--
+			<Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
+				maxThreads="150" minSpareThreads="4"/>
+			-->
+
+
+			<!-- A "Connector" represents an endpoint by which requests are received
+				 and responses are returned. Documentation at :
+				 Java HTTP Connector: /docs/config/http.html
+				 Java AJP  Connector: /docs/config/ajp.html
+				 APR (HTTP/AJP) Connector: /docs/apr.html
+				 Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
+			-->
+			<Connector port="8080" protocol="HTTP/1.1"
+					   connectionTimeout="20000"
+					   redirectPort="8443"
+					   maxParameterCount="1000"
+					   />
+			<!-- A "Connector" using the shared thread pool-->
+			<!--
+			<Connector executor="tomcatThreadPool"
+					   port="8080" protocol="HTTP/1.1"
+					   connectionTimeout="20000"
+					   redirectPort="8443"
+					   maxParameterCount="1000"
+					   />
+			-->
+			<!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443
+				 This connector uses the NIO implementation. The default
+				 SSLImplementation will depend on the presence of the APR/native
+				 library and the useOpenSSL attribute of the AprLifecycleListener.
+				 Either JSSE or OpenSSL style configuration may be used regardless of
+				 the SSLImplementation selected. JSSE style configuration is used below.
+			-->
+			<!--
+			<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+					   maxThreads="150" SSLEnabled="true"
+					   maxParameterCount="1000"
+					   >
+				<SSLHostConfig>
+					<Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+								 certificateKeystorePassword="changeit" type="RSA" />
+				</SSLHostConfig>
+			</Connector>
+			-->
+			<!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
+				 This connector uses the APR/native implementation which always uses
+				 OpenSSL for TLS.
+				 Either JSSE or OpenSSL style configuration may be used. OpenSSL style
+				 configuration is used below.
+			-->
+			<!--
+			<Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
+					   maxThreads="150" SSLEnabled="true"
+					   maxParameterCount="1000"
+					   >
+				<UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+				<SSLHostConfig>
+					<Certificate certificateKeyFile="conf/localhost-rsa-key.pem"
+								 certificateFile="conf/localhost-rsa-cert.pem"
+								 certificateChainFile="conf/localhost-rsa-chain.pem"
+								 type="RSA" />
+				</SSLHostConfig>
+			</Connector>
+			-->
+
+			<!-- Define an AJP 1.3 Connector on port 8009 -->
+			<!--
+			<Connector protocol="AJP/1.3"
+					   address="::1"
+					   port="8009"
+					   redirectPort="8443"
+					   maxParameterCount="1000"
+					   />
+			-->
+
+			<!-- An Engine represents the entry point (within Catalina) that processes
+				 every request.  The Engine implementation for Tomcat stand alone
+				 analyzes the HTTP headers included with the request, and passes them
+				 on to the appropriate Host (virtual host).
+				 Documentation at /docs/config/engine.html -->
+
+			<!-- You should set jvmRoute to support load-balancing via AJP ie :
+			<Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
+			-->
+			<Engine name="Catalina" defaultHost="localhost">
+
+			  <!--For clustering, please take a look at documentation at:
+				  /docs/cluster-howto.html  (simple how to)
+				  /docs/config/cluster.html (reference documentation) -->
+			  <!--
+			  <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+			  -->
+
+			  <!-- Use the LockOutRealm to prevent attempts to guess user passwords
+				   via a brute-force attack -->
+			  <Realm className="org.apache.catalina.realm.LockOutRealm">
+				<!-- This Realm uses the UserDatabase configured in the global JNDI
+					 resources under the key "UserDatabase".  Any edits
+					 that are performed against this UserDatabase are immediately
+					 available for use by the Realm.  -->
+				<Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+					   resourceName="UserDatabase"/>
+			  </Realm>
+
+			  <Host name="localhost"  appBase="webapps"
+					unpackWARs="true" autoDeploy="true">
+
+				<!-- SingleSignOn valve, share authentication between web applications
+					 Documentation at: /docs/config/valve.html -->
+				<!--
+				<Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+				-->
+
+				<!-- Access log processes all example.
+					 Documentation at: /docs/config/valve.html
+					 Note: The pattern used is equivalent to using pattern="common" -->
+				<Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+					   prefix="localhost_access_log" suffix=".txt"
+					   pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+			  </Host>
+			</Engine>
+		  </Service>
+		</Server>
+		
+**************************************************************************************************************
+
+		[root@ip-10-20-25-151 conf]#vi server.xml
+#Under Connector port please update your port value 
+		<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               maxParameterCount="1000"
+               />
+**************************************************************************************************************

@@ -1,0 +1,5 @@
+# Node.js application
+FROM node:18
+
+# Python application
+FROM python:3.11

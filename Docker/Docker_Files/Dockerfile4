@@ -1,0 +1,9 @@
+FROM ubuntu
+LABEL Name="Durga Rao"
+RUN apt-get update
+RUN apt-get install -y bash
+WORKDIR ynd
+# Create 10 CSV files during build
+RUN for i in $(seq 1 10); do touch "file${i}.csv"; done
+CMD ["bash"]
+

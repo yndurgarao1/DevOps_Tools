@@ -1,0 +1,121 @@
+#######Kubernetes Installation on Amazon Installation########
+
+#yum update -y
+	yum 	→ The package manager used in RHEL/CentOS/Amazon Linux systems (older versions; newer ones use dnf).
+	update 	→ Tells yum to update all installed packages to the latest available versions from the configured repositories.
+	-y 		→ Automatically answers "yes" to all prompts, so the update runs without asking for confirmation.
+
+#yum install -y docker
+
+#systemctl enable docker && systemctl start docker
+	systemctl enable docker
+		Registers Docker to start automatically at boot.
+		Creates symlinks in /etc/systemd/system/... so the service is enabled on system startup.
+		Does not start Docker immediately, just ensures it will run after every reboot.
+	systemctl start docker
+		Starts the Docker daemon right now in the current session.
+		You can then run Docker commands like docker ps or docker run
+		
+#swapoff -a 
+	swapoff → Disables swap space on the system.
+	-a 		→ Applies the action to all swap devices and files listed in /proc/swaps.
+	In practice:
+		It immediately turns off all active swap areas (both swap partitions and swap files).
+		After running it, the system will rely only on physical RAM. [ virtual memory to be off ]
+		If RAM usage exceeds available memory, processes may fail or be killed by the OOM (Out Of Memory) killer.
+	Why it’s used:
+		Often required before resizing partitions or disabling swap permanently.
+		Common in Kubernetes setups, because kubelet expects swap to be disabled for performance and scheduling consistency.
+		Used in troubleshooting memory performance issues.
+
+=============================================		
+#vi /etc/docker/daemon.json
+{
+ "exec-opts": ["native.cgroupdriver=systemd"]
+}
+==============================================
+	That snippet is configuring Docker’s daemon.json file to set the cgroup driver:
+	What it means:
+		exec-opts 					→ Options passed to the Docker daemon when it starts.
+		native.cgroupdriver=systemd → Tells Docker to use systemd as the cgroup driver instead of the default cgroupfs.
+	Why it’s important:
+		Kubernetes (and many modern container orchestration tools) expect Docker to use the same cgroup driver as the host system.
+		On most Linux distros, systemd is the init system and manages cgroups.
+		If Docker uses cgroupfs while Kubernetes uses systemd, you can get resource conflicts or errors like:
+
+#sudo systemctl restart docker
+
+#sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+	yum-utils
+		Provides extra utilities for YUM (like yum-config-manager, repoquery, etc.).
+		Useful for managing repositories and troubleshooting package issues.
+
+	device-mapper-persistent-data
+		Required for Docker’s overlay2 and devicemapper storage drivers.
+		Provides persistent metadata storage for device-mapper thin provisioning.
+	lvm2
+		Logical Volume Manager tools.
+		Needed when Docker uses the devicemapper storage driver, since it relies on LVM for managing thin pools.
+
+#sudo mkdir -p /etc/containerd
+#containerd config default | sudo tee /etc/containerd/config.toml
+	What it does:
+		containerd config default 				→ Generates the default configuration file for containerd in TOML format.
+		| sudo tee /etc/containerd/config.toml 	→ Pipes the output into tee, which writes it to /etc/containerd/config.toml with elevated privileges (sudo).
+		The result: You now have a full default config file saved at /etc/containerd/config.toml.
+	Why it’s used:
+		By default, containerd may run without a config file, using built-in defaults.
+		Creating /etc/containerd/config.toml gives you a baseline file you can edit for custom settings (like SystemdCgroup = true, registry mirrors, snapshotter options, etc.).
+		This is a common step when preparing containerd for Kubernetes clusters, because kubelet often requires specific runtime settings.
+
+#sudo vi /etc/containerd/config.toml
+	check SystemdCgroup = false and make it chnage to SystemdCgroup = true
+	
+	Aligns runtime with systemd for cgroup management
+
+#sudo systemctl restart containerd
+#sudo systemctl enable containerd
+#sudo systemctl status containerd
+#cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+EOF
+
+#cat <<EOF >  /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+
+#sysctl --system
+	sysctl	 → Tool to configure kernel parameters at runtime.
+	--system → Tells sysctl to reload all configuration files from standard locations.
+
+#setenforce 0
+	setenforce → Command to change the mode of SELinux (Security-Enhanced Linux) at runtime.
+	0 → Disables SELinux enforcement, switching it into permissive mode.
+	
+#yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+#systemctl enable kubelet && systemctl start kubelet
+#kubeadm init
+	To start using your cluster, you need to run the following as a regular user:
+
+	  mkdir -p $HOME/.kube
+	  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+	  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+	Alternatively, if you are the root user, you can run:
+
+	  export KUBECONFIG=/etc/kubernetes/admin.conf
+#export KUBECONFIG=/etc/kubernetes/admin.conf
+#vi .bash_profile
+	export KUBECONFIG=/etc/kubernetes/admin.conf
+#kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.2/manifests/calico.yaml
+
+
+
+

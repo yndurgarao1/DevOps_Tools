@@ -1,0 +1,20 @@
+
+#kubectl get nodes  					==> To get Worker Nodes 
+#kubectl run <Pod_Name> --image=nginx:1.19
+#kubectl run test1 --image=nginx:1.19 	==> to create pod with pod name is test1
+#kubectl run test1 --image nginx:1.19
+#kuectl get pods 						==> To list pods
+#kubectl get pods --output wide			==> To list pods with worker node information
+#kubectl delete pods <Pod_Name>			==> To delete pod
+#kubectl delete pod test1
+#kubectl describe pod <Pod_Name>
+#kubectl describe node <Node_Name>
+#kubectl create -f kubernetes.yaml ( or ) 
+#kubectl apply -f kubernetes.yaml
+#kubectl scale --replicas=4 replicaset <Replicaset_name>		==> To scale containers
+#kubectl get replicatset   ==> To get replicaset ( Or)
+#kubectl get rs		
+#kubectl delete replicaset <Replicaset_name>
+#kubectl edit rs <replicaset_name>
+
+

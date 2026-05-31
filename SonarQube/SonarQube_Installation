@@ -1,0 +1,18 @@
+#SonarQube
+#[root@ip-10-20-25-151 linux-x86-64]# history
+    1  yum install -y java-17  === > java pre-requistic
+    2  cd /opt  ==> Third Party installation we need to install under /opt directory
+    3  sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.1.0.47736.zip
+    4  unzip sonarqube-9.1.0.47736.zip
+    5  chown -R ec2-user:ec2-user sonarqube-9.1.0.47736
+    6  cd /opt/sonarqube-9.1.0.47736/bin/linux-x86-64
+    7  vi sonar.sh  ==> RUN_AS_USER=ec2-user
+    8  sh sonar.sh start  ==> sonar service starting
+    9  netstat -ntlp
+   10  cd /opt/sonarqube-9.1.0.47736/conf
+   11  vi sonar.properties  ==> to update port sonar.web.port=7788
+   12  cd bin
+   13  cd linux-x86-64/
+   14  ./sonar.sh stop
+   15  ./sonar.sh start
+   16  netstatt -ntlps

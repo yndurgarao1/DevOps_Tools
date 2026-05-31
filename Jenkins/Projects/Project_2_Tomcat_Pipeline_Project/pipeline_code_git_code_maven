@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage(clone) {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/yndrao/java_project.git'
+            }
+		}
+		stage(build) {
+			steps {
+				sh 'mvn clean'
+				sh 'mvn package'
+			}
+		}
+    }
+}

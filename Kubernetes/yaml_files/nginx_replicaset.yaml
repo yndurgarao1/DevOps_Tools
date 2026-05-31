@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-replica-set1
+  labels:
+    type: frountend
+    client: ibm
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      type: frountend
+      client: ibm
+  template:
+    metadata:
+      labels:
+        type: frountend
+        client: ibm
+    spec:
+      containers:
+      - name: nginx-containers1
+        image: nginx:1.19
+        ports:
+        - containerPort: 80
+

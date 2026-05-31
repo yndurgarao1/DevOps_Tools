@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    type: frountend
+    client: ibm
+spec:
+  containers:
+  - name: nginx-containers
+    image: nginx:1.19

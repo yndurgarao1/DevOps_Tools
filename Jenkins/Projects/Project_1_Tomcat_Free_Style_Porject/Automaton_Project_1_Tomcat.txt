@@ -1,0 +1,46 @@
+#Automation Project ---> Free Style Project ---> Tomcat 
+============================================================
+Jenkins Dashboard --> New Item --> Enter Item Name ( Job Name ) --> Select Freestyle project  --> Click on Ok Button
+	Job Name: Project_1_Git_Maven_Tomcat
+#Once Job Created, Under jenkins Dashboard select the job and click on conigure option.
+	General
+	Source Code Management
+	Triggers
+	Envronment
+	Build Steps
+	Post-build Actions
+
+#Under Source Code Management option plese provide git details
+#Build Step : Select [ Invoke top-level Maven targets ]
+
+[Note: For copying .war file to Tomcat Server in free style project we need to install Deploy to container pluggin ]
+#Jenkins Dashboard --> Manage Jenkins --> Pluggins --> Available Pluggins --> Search Deploy to Container pluggin -- > Select pluggin --> click Install 
+ 
+#under Post-build Actions --Select deploy to container 
+	WAR/EAR files
+		target/*.war
+	Context Path
+		myweb [ Project Name ]
+	Containers
+		Tomcat 9.x Remote	
+			Credentials
+				Please add crediantilas in Jenkins Crediantials provider
+			Tomcat URL
+				http://52.195.234.110:5656/
+====================================================================
+#Build Periodically: Suppose the job to run on spefic time with out humam interaction, we can use Build periodically option under Truggers
+#Poll SCM: Suppose if we done any changes in Git repository, the job needs to be run post that with out human interaction.
+#webhooks: If any changes done in git, immeiately job needs to be triggered through event based.
+	Steps:
+		Go To GitHub Account and login 
+		Select the required Repository
+		Go to Settings for that Repository
+		Click on webhooks
+			select  Add webhook
+					Payload URL *
+						provide jenkins URL [ http://57.181.37.29:8080/github-webhook/ ]
+					Content type *
+						Select application/json
+========================================================================================
+					
+		

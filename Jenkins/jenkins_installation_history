@@ -1,0 +1,23 @@
+[root@ip-10-20-25-245 system]# history
+    1  clear
+    2  yum install -y java-21
+    3  sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    4  sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+    5  sudo yum install jenkins -y
+    6  sudo systemctl enable jenkins
+    7  sudo systemctl start jenkins
+    8  cat /var/lib/jenkins/secrets/initialAdminPassword
+    9  cd /usr/lib
+   10  clear
+   11  ls
+   12  cd systemd
+   13  ls
+   14  cd system
+   15  ls
+   16  clear
+   17  vi jenkins.service
+   18  systemctl daemon-reload
+   19  systemctl restart jenkins
+   20  systemctl status jenkins
+   22  netsta -ntlp
+

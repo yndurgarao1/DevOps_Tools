@@ -1,0 +1,15 @@
+Jenkins Default Port = 8080
+#Changing Default Port to Custom Port
+
+[root@ip-10-20-25-181 jenkins]# cd /usr/lib/systemd/system
+[root@ip-10-20-25-181 system]# vi jenkins.service
+	****Update Under Environment="JENKINS_PORT=8080" 
+	Environment="JENKINS_PORT=5555"
+[root@ip-10-20-25-181 system]#systemctl daemon-reload
+[root@ip-10-20-25-181 system]#systemctl restart jenkins
+[root@ip-10-20-25-181 system]#systemctl status jenkins
+
+
+
+
+

@@ -1,0 +1,6 @@
+[root@ip-172-31-83-229 ~]# cat Dockerfile1
+FROM ubuntu:latest
+MAINTAINER "Durga Rao"
+WORKDIR /durga
+COPY ynd/ /durga
+CMD ["bash"]

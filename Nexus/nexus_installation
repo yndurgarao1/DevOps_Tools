@@ -1,0 +1,19 @@
+[root@ip-20-30-40-247 init.d]# history
+    2  yum install -y java-17
+    3  cd /opt
+    5  wget https://download.sonatype.com/nexus/3/nexus-3.89.0-09-linux-x86_64.tar.gz
+    8  tar -xvf nexus-3.89.0-09-linux-x86_64.tar.gz
+   11  mv nexus-3.89.0-09 nexus3
+   13  chown -R ec2-user:ec2-user nexus3 sonatype-work/
+   17  cd nexus3/
+   19  cd bin
+   21  vi nexus.rc
+   22  ln -s /opt/nexus3/bin/nexus /etc/init.d/nexus
+   23  cd /etc/init.d/
+   25  chkconfig --add nexus
+   26  chkconfig nexus on
+   27  service nexus start
+   31  netstat -ntlp
+   38  history
+[root@ip-20-30-40-247 init.d]#
+

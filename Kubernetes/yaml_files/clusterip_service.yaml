@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cip
+  labels:
+    type: frountend
+    client: ibm
+spec:
+  type: ClusterIP
+  selector:
+    type: frountend
+    client: ibm
+  ports:
+  - port: 80
+

@@ -1,0 +1,11 @@
+# Base image
+FROM ubuntu:20.04
+
+# Add metadata about the image
+LABEL maintainer="Kadali <kadali@example.com>" \
+      version="1.0" \
+      description="Example Dockerfile using FROM, LABEL, and RUN instructions."
+
+# Execute commands inside the image during build
+RUN apt-get update && apt-get install -y curl
+

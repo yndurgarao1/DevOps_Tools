@@ -1,0 +1,144 @@
+***************Git clone for Public Repository [ with out password ]*******************************
+pipeline {
+    agent any 
+        stages {
+            stage(Git_Clone) {
+                steps {
+                    sh 'git clone https://github.com/yndrao/java_project.git'
+                }
+            }
+        }
+}
+*******************Git Clone with Workspace Directory Cleaning**************************************
+pipeline {
+    agent any 
+        stages {
+            stage(Workspace_Clean) {
+                steps {
+                    sh 'rm -rf java_project'
+                }
+            }
+            stage(Git_Clone) {
+                steps {
+                    sh 'git clone https://github.com/yndrao/java_project.git'
+                }
+            }
+        }
+}
+*****************Git Clone with Maven Commands*****************************************************
+pipeline {
+    agent any 
+        stages {
+            stage(Workspace_Clean) {
+                steps {
+                    sh 'rm -rf java_project'
+                }
+            }
+            stage(Git_Clone) {
+                steps {
+                    sh 'git clone https://github.com/yndrao/java_project.git'
+                }
+            }
+			stage(Maven_Build) {
+				steps {
+					sh 'cd java_project'
+					sh 'mvn clean'
+					sh 'mvn package'
+				}
+			}
+        }
+}
+***************Git Clone with maven commands execution ******************************************
+pipeline {
+    agent any 
+        stages {
+            stage(Workspace_Clean) {
+                steps {
+                    sh 'rm -rf java_project'
+                }
+            }
+            stage(Git_Clone) {
+                steps {
+                    sh 'git clone https://github.com/yndrao/java_project.git'
+                }
+            }
+			stage(Maven_Build) {
+			    steps {
+			        dir('java_project') {
+			            sh 'mvn clean'
+			            sh 'mvn package'
+			        }
+			    }
+			}
+        }
+}
+******************************Git clone with war file copying to Tomcat Server *******************
+pipeline {
+    agent any 
+        stages {
+            stage(Workspace_Clean) {
+                steps {
+                    sh 'rm -rf java_project'
+                }
+            }
+            stage(Git_Clone) {
+                steps {
+                    sh 'git clone https://github.com/yndrao/java_project.git'
+                }
+            }
+			stage(Maven_Build) {
+			    steps {
+			        dir('java_project') {
+			            sh 'mvn clean'
+			            sh 'mvn package'
+			        }
+			    }
+			}
+			stage(Tomcat) {
+				steps {
+					sshagent(['tokyo_region_key']) {
+					    sh """
+					    scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/Project_1/java_project/target/*.war ec2-user@10.20.25.200:/apache-tomcat-9.0.115/webapps
+                        """
+					}
+					}        
+			}
+        }
+}
+We need add pem file in crediantials
+*******************tomacat****************************************************************************************
+pipeline {
+    agent any 
+        stages {
+            stage(Workspace_Clean) {
+                steps {
+                    sh 'rm -rf java_project'
+                }
+            }
+            stage(Git_Clone) {
+                steps {
+                    sh 'git clone https://github.com/yndrao/java_project.git'
+                }
+            }
+			stage(Maven_Build) {
+			    steps {
+			        dir('java_project') {
+			            sh 'mvn clean'
+			            sh 'mvn package'
+			        }
+			    }
+			}
+			stage(Tomcat) {
+				steps {
+					sshagent(['tokyo_region_key']) {
+					    sh """
+					    scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/Project_1/java_project/target/*.war ec2-user@10.20.25.200:/home/ec2-user/apache-tomcat-9.0.115/webapps
+					    ssh ec2-user@10.20.25.200 /home/ec2-user/apache-tomcat-9.0.115/bin/shutdown.sh
+                        ssh ec2-user@10.20.25.200 /home/ec2-user/apache-tomcat-9.0.115/bin/startup.sh
+                        """
+					}
+					}        
+			}
+        }
+}
+********************************************************************************************************************

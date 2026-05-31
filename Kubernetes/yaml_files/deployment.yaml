@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeployment
+  labels:
+    type: frountend1
+    client: infosys
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      type: frountend1
+      client: infosys
+  template:
+    metadata:
+      labels:
+        type: frountend1
+        client: infosys
+    spec:
+      containers:
+      - name: mycon11
+        image: nginx:1.19
+        ports:
+        - containerPort: 80
+
