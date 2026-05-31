@@ -1,0 +1,1 @@
+https://computingforgeeks.com/install-kubernetes-kubeadm-ubuntu-2604/  ==> Kubernetes cluster setup for Ubuntu 26.04 

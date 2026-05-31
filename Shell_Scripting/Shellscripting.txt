@@ -1,0 +1,438 @@
+SCRIPT FOR DISPLAYING DATE:-
+==================================
+
+vi script1.sh
+---------------------------------------------------
+#!/bin/bash 
+
+DATE=$(date +%F)
+
+echo "todays date is : $DATE"
+
+exit 0
+------------------------------------------------------
+
+# chmod +x script1.sh
+
+
+# ./script1.sh
+
+
+
+
+
+
+EXPLAINATION:-
+--------------
+
+date is a linux command
+
+date --help to know more about options like "%F"
+
+DATE is a variable which stores command output
+
+
+
+
+=============================================================
+
+---------------------------------------------------------
+HOW TO FIND LOG FILES AND DISPALY ERRORS AND EXCEPTIONS:-
+---------------------------------------------------------
+
+1. how to find "errors" & "exceptions" in a log file
+
+  # cat logfile |grep errors (or) # cat logfile |grep exceptions
+
+
+
+2. how to find "errors" & "exceptions" in 3 files namely file1.log, file2.log, file3.log uder shell script directory
+  
+   [root@host2 shellscript] #find . -name "*.log" -exec grep "exception" {} \;
+
+
+=============
+EXPLAINATION:-
+=============
+here "find" is used to find the log files
+
+exec command is like for loop, it will iterate all the files
+
+grep is used to search the word error and exception
+
+
+
+=============================================================
+
+DISPLAYING CONTENTS OF A FILE:-
+===============================
+
+
+vi script1.sh
+----------------------------------------------
+#! /bin/bash
+
+echo "enter a filename to display its content"
+
+read file_name
+
+cat "$file_name" 
+-----------------------------------------------   
+
+
+chmod u+x file1.sh
+
+./script1.sh              
+
+
+
+EXPLAINATION:-
+=============
+
+take the input from keyboard
+
+
+then cat command will display the contents of a file
+
+================================================
+
+TO CHECK WHEATHER THE FILE EXISTS OR NOT:-
+==========================================
+
+
+
+vi script1.sh
+---------------------------------------------------
+read file1
+echo "enter file name"
+
+if [ -e $file1 ]                                       
+then
+    echo "$file1 exist"
+else
+    echo "Sorry, $1 file does not exist"
+fi
+
+---------------------------------------------------
+
+# chmod +x script1.sh
+
+# ./script1.sh
+
+
+
+
+EXPLAINATION:-
+--------------
+
+-f FILE = FILE exists and is a regular file
+
+-e FILE = FILE exists
+
+-d FILE = FILE exists and is a directory
+
+
+
+the above are callled file test operators
+
+==========================================================
+
+
+----------------------------------------------------------
+HOW TO FIND FILES/DIRECTORIES WHICH ARE OLDER THAN X DAYS:-
+----------------------------------------------------------
+
+1. find files which are older than 1 day
+
+   #find current-directory command days
+   #find . -mtime -1
+
+
+
+2. find directories which are older than 1 day
+
+   #find current-directory -type d command days
+   #find . -type d -mtime -1
+
+
+=========================================================================
+
+
+SCRIPT FOR PINGING OTHER SERVERS AND MAILING IF THEY ARE UN REACHABLE:-
+=======================================================================
+
+1. write all host entries in a file
+   #vi /hosts.txt
+------------------------------------
+server1.com
+server2.com
+server3.com
+192.168.91.23
+---------------------------------------
+
+
+
+vi script1.sh
+---------------------------------------------------
+#!/bin/bash 
+for var in `cat /hosts.txt`
+do
+ ping -c5 $var >/dev/null 2>&1
+ if [ $? -eq 0 ]
+  then
+   echo "the site $var is up"
+  else
+   echo "the site $var is down"| mail -s "$var down" kommojuvenkata@gmail.com
+ fi
+done
+
+
+(or)
+
+
+while read var1
+do
+ping -c5 $var1 >/dev/null 2>&1
+if [ $? -eq 0 ]
+then
+ echo "the site $var1 is up"
+else
+  echo "the site $var1 is down" | mail -s "subject" kommoju123@gmail.com
+fi
+done <hosts.txt
+
+
+
+------------------------------------------------------
+
+# chmod +x script1.sh
+
+# ./script1.sh
+
+
+
+
+
+
+EXPLAINATION:-
+--------------
+we will give hosts.txt as a input
+
+now every entry will be iterated and checked if they are up and running
+
+
+==================================================================
+
+SENDING EMAIL WHEN MEMORY IS LESS:-
+==================================
+
+
+vi script1.sh
+---------------------------------------------------
+#!/bin/bash 
+
+FREE=$(free -mt | grep Total | awk '{print $4}')
+
+if [[ "$FREE" -le 100  ]]; then
+
+echo "Warning, server memory is running low" | mail -s "$FREE less memory"kommojuvenkata@gmail.com
+	else
+   echo "nothing to worry"
+
+fi
+
+exit 0
+------------------------------------------------------
+# chmod +x script1.sh
+
+# ./script1.sh
+
+
+
+
+===============
+EXPLAINATION:-
+===============
+1. BIN BASH CHECKING
+
+2. WHAT IS THE SUBJECT
+
+3. FROM ADDRESS
+
+4. TO ADDRESS
+
+5. EXECUTING COMMAND FOR FREE MEMORY IN MB
+
+6. CHECK IF FREE MEMORY IS LESS THAN 100MB OR NOT
+
+7. THEN SEND EMAIL 
+
+8. ELSE NO
+
+======================================================
+
+
+SENDING EMAIL WHEN DISK SPACE IS LESS:-
+=======================================
+
+
+vi script1.sh
+---------------------------------------------------
+#!/bin/bash
+
+i=2
+var1=$(df -h |grep -v "Filesystem" | awk '{ print $5 }' | sed 's/%//g')
+threshold=30
+for percent in $var1;
+do
+ if [ "$percent" -gt "$threshold" ]
+  then
+mountpoint=`df -kh | head -$i | tail -1| awk '{print $6}'`
+
+echo "the mount point $mountpoint is ${percent}%, immediate action required"
+ fi
+let i=$i+1
+done
+
+
+------------------------------------------------------
+# chmod +x script1.sh
+
+# ./script1.sh
+
+
+
+
+===============
+EXPLAINATION:-
+===============
+1. i=2 means first line is filesystem, use, available headings which are not uses so we skipped i=1
+
+
+2. df -h |grep -v "Filesystem" | awk '{ print $5 }' | sed 's/%//g'------>will give you output in numbers otherwise it would be 
+   difficult to compare with numeric
+    Ex:- comand o/p:- 32   otherwise 32%
+
+
+3. we have defined threshold value in a varaible
+
+4. df -kh | head -$i | tail -1| awk '{print $6}'-------------->this command is telling to print last line of n heads
+    Ex:-head -3 |tail -1------>to print 3rd line
+
+5. iterating i=$i+1
+
+
+
+df -h
+----------------------------------------------------------------------------------------------
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root   17G  5.4G   12G  32% /
+devtmpfs                 897M     0  897M   0% /dev
+tmpfs                    912M     0  912M   0% /dev/shm
+tmpfs                    912M  9.0M  903M   1% /run
+tmpfs                    912M     0  912M   0% /sys/fs/cgroup
+/dev/sda1               1014M  179M  836M  18% /boot
+tmpfs                    183M   28K  183M   1% /run/user/1000
+/dev/sr0                 4.3G  4.3G     0 100% /run/media/jenkins/CentOS 7 x86_64
+------------------------------------------------------------------------------------------   
+
+
+
+now we have to remove first line so use grep -v "Filesystem"
+
+df -h |grep -v "Filesystem"
+--------------------------------------------------------------------------------------------
+/dev/mapper/centos-root   17G  5.4G   12G  32% /
+devtmpfs                 897M     0  897M   0% /dev
+tmpfs                    912M     0  912M   0% /dev/shm
+tmpfs                    912M  9.0M  903M   1% /run
+tmpfs                    912M     0  912M   0% /sys/fs/cgroup
+/dev/sda1               1014M  179M  836M  18% /boot
+tmpfs                    183M   28K  183M   1% /run/user/1000
+/dev/sr0                 4.3G  4.3G     0 100% /run/media/jenkins/CentOS 7 x86_64
+---------------------------------------------------------------------------------------------
+
+
+now we want only 5th column
+
+df -h |grep -v "Filesystem" | awk '{ print $5 }'
+----------------------------------------------------------------------------------
+32%
+0%
+0%
+1%
+0%
+18%
+1%
+100%
+-----------------------------------
+
+now we want to remove % inoder for integer comparison
+
+df -h |grep -v "Filesystem" | awk '{ print $5 }' | sed 's/%//g'
+---------------------
+32
+0
+0
+1
+0
+18
+1
+100
+----------------
+
+
+===================================================
+
+
+SENDING EMAIL WHEN MEMORY IS LESS:-
+==================================
+
+
+vi script1.sh
+---------------------------------------------------
+#! /bin/bash
+cpu=$(sar 2 2 |grep Average |awk -F" " '{print 100.0 -$NF}') #(or) cpu=`sar 2 2 |grep Average |awk -F" " '{print 100.0 -$NF}'`
+
+gpu=${cpu%%.*}
+
+threshold=80
+
+if [ "$gpu" -gt "$threshold" ]
+then
+echo "cpu is taking $gpu very high immediate action required"
+else
+echo "not an issue"
+fi
+
+------------------------------------------------------
+# chmod +x script1.sh
+
+# ./script1.sh
+
+
+
+
+===============
+EXPLAINATION:-
+===============
+1. we will get load average from sar 2 2 command
+
+2. then we are greping Average
+
+3. we are subtracting 100-idle
+
+4. comparing the 100-value with threshold
+
+
+*where NF= nth field
+
+
+
+
+
+ps -eo pid,user,%cpu --sort=-%cpu
+
+
+
+==================================
