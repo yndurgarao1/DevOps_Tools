@@ -1,1 +1,3 @@
-#AWS Notes
+#Cloud Watch to Setup we need to set up SSM AGENT in our ec2 Instances 
+$sudo systemctl status amazon-ssm-agent
+
