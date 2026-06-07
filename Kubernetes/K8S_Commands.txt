@@ -36,11 +36,16 @@ ytg0be.cx8g4efmx3x63q57   23h         2026-06-08T14:12:49Z   authentication,sign
 [root@ip-50-55-50-192 ~]#
 
 =======================================
-[root@ip-50-55-50-192 ~]# kubeadm token create --print-join-command --certificate-key $(kubeadm init phase upload-certs --upload-certs | tail -n 1)
-I0607 14:35:05.326057   74473 version.go:256] remote version is much newer: v1.36.1; falling back to: stable-1.28
-kubeadm join 50.55.50.192:6443 --token dswov6.c9jfq3d73w7ktwp8 --discovery-token-ca-cert-hash sha256:226d40a145d649d3cb0a89a9f5229f22e546e9c02ce1e08371e78d4d8f63104c --control-plane --certificate-key b4671596d9b13065ec248207e9a6242d2e0d9677fd215e63520b0c53ea5b05b5
-[root@ip-50-55-50-192 ~]#
+#To create pod 
+$kubectl run <pod_name> --image=<Image_name>:<Tag>
+$kubectl run mypod1 --image=nginx:latest
+$kubectl run mypod2 --image nginx:latest
 
+#To get pods list 
+$kubectl get pods 
+$kubectl get pods -o wide 
+$kubectl get pods --output wide
+$kubectl describe pod <pod_name>
 
 
 
