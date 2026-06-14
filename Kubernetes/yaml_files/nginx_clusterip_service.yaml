@@ -1,1 +1,39 @@
 apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment-01
+  labels:
+    type: frontend
+    client: IBM
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      type: frontend
+      client: IBM
+  template:
+    metadata:
+      labels:
+        type: frontend
+        client: IBM
+    spec:
+      containers:
+      - name: webapp-01
+        image: nginx:1.18
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-01
+  labels:
+    type: frontend
+    client: IBM
+spec:
+  type: ClusterIP
+  selector:
+    type: frontend
+    client: IBM
+  ports:
+    - protocol: TCP
+      port: 80  
