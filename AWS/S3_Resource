@@ -1,0 +1,30 @@
+To Create S3 Bucket
+Path: Amazon S3 ==> Buckets ==> s3-demo-ynd (Bucket Name)
+
+To Upload Objects:
+Amazon S3 ==> Buckets ==> s3-demo-ynd ==> Upload
+
+Bucket Versioning:
+Amazon S3 ==> Buckets ==> s3-demo-ynd ==> Properties ==>Bucket Versioning should be enbaled 
+When Obects are uploading into bucket, versions will be maintained 
+
+To Access Objects in Internet:
+Amazon S3 ==> Buckets ==> s3-demo-ynd ==> Permissions ==> Block public access ==> uncheck Block all public access ==> Save Changes
+
+Amazon S3 ==> Buckets ==> s3-demo-ynd ==> Permissions ==> Bucket policy
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::s3-demo-ynd/*"
+        }
+    ]
+}
+
+Static Website Hosting:
+
