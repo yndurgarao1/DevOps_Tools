@@ -27,4 +27,13 @@ Amazon S3 ==> Buckets ==> s3-demo-ynd ==> Permissions ==> Bucket policy
 }
 
 Static Website Hosting:
+Amazon S3 ==> Buckets ==> s3-demo-ynd ==> Properties ==> Static Website Hosting ==> Should be Enabled 
 
+Replication (SRR - Same Region Replication && CRR - Cross Region Replication )
+Amazon S3 ==> Bucket ==> s3-demo-ynd ==> Management ==> Replication Rules
+
+We  need to create rule before that we need to create a S3 bucket
+
+
+
+W
