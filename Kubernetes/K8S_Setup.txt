@@ -1,0 +1,17 @@
+Ports to be add in Security Group
+================================
+PORT	    PROTOCOL	PURPOSE
+6443	    TCP	        Kubernetes API server (master)
+10250	    TCP	        Kubelet API
+30000–32767	TCP	        NodePort services
+2379–2380	TCP	        etcd server client API (master)
+10251	    TCP	        kube-scheduler (master)
+10255	    TCP	        kube-controller-manager (master)
+10252	    TCP	        Read-only Kubelet API (optional)
+====================================================================
+1. Set hostname
+hostnamectl set-hostname master  # On master
+hostnamectl set-hostname worker  # On worker
+===================================================================
+2. Add entries to /etc/hosts (on both)
+vi /etc/hosts
