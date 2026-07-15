@@ -1,3 +1,36 @@
-FROM ubuntu:22.04
-RUN echo "This is Docker file execution $Version"
-CMD ["bash"]
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+RUN apt-get update -y 
+CMD ["echo", "Hello-World"]
+------------------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.1 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1
+Hello-World
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1 echo "Durga"
+Durga
+==========================================================================
+
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+RUN apt-get update -y 
+ENTRYPOINT ["echo", "Hello-World"]
+------------------------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.1 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1
+Hello-World
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1 echo "durga"
+Hello-World echo durga
+
+========================================================================
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+RUN apt-get update -y
+CMD ["echo", "hello-Durga"] 
+ENTRYPOINT ["echo", "Hello-World"]
+------------------------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.7
+Hello-World echo Hello-Durga
+
+When both CMD and ENTRYPOINT are present, ENTRYPOINT takes priority as the executable and CMD becomes the default arguments passed to ENTRYPOINT.
+
+Because ENTRYPOINT runs echo Hello-World, and then CMD is appended as extra arguments.
