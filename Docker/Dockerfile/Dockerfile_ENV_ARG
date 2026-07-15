@@ -1,0 +1,38 @@
+[root@ip-10-20-10-205 Docker]# cat Dockerfile
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+RUN apt-get update -y
+ENV DOCKER_HOME_DIR=/var/lib/docker
+CMD ["sh", "-c", "echo $DOCKER_HOME_DIR"]
+-------------------------------------------------
+#sh -c: Runs a shell and executes the string provided.
+
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.3 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.3
+/var/lib/docker
+[root@ip-10-20-10-205 Docker]# docker run -e DOCKER_HOME_DIR=/home/ec2-user myimage:0.3
+/home/ec2-user
+[root@ip-10-20-10-205 Docker]# docker run --env DOCKER_HOME_DIR=/home/ec2-user/docker myimage:0.8
+/home/ec2-user/docker
+/home/ec2-user/volumes
+===============================================================================================
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.8
+/var/lib/docker
+/home/ec2-user/volumes
+[root@ip-10-20-10-205 Docker]# cat Dockerfile
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+RUN apt-get update -y
+ENV DOCKER_HOME_DIR=/var/lib/docker
+ARG DOCKER_VOLUME_DIR=/var/lib/docker/volumes
+ENV DOCKER_VOLUME_DIR=$DOCKER_VOLUME_DIR
+CMD ["sh", "-c", "echo $DOCKER_HOME_DIR && echo $DOCKER_VOLUME_DIR"]
+------------------------------------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker build --build-arg DOCKER_VOLUME_DIR=/home/ec2-user/volumes -t myimage:0.8 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.8
+/var/lib/docker
+/home/ec2-user/volumes
+
+Note: The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command
+using the --build-arg <varname>=<value> flag. The ENV instruction sets the environment variable in the container. 
+In this case, DOCKER_VOLUME_DIR is set as an ARG and then used to set an ENV variable, allowing it to be overridden at build time.

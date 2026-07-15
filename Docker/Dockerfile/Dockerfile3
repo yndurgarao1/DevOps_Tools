@@ -1,7 +1,0 @@
-FROM ubuntu:20.04
-
-# Set environment variable
-ENV MY_VAR=hello
-
-CMD ["bash", "-c", "echo $MY_VAR"]
-
