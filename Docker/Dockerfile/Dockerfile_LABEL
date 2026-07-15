@@ -1,0 +1,18 @@
+##### Docker File instruction for Label ######
+
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+RUN apt-get update -y 
+CMD ["bash"]
+--------------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.1 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1
+
+====================================================================
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+LABEL Version = "1.0"
+RUN apt-get update -y 
+CMD ["bash"]

@@ -1,0 +1,15 @@
+######## Docker File Instruction for WORKDIR ########
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+LABEL Version = "1.0"
+RUN apt-get update -y
+WORKDIR /Renuka 
+CMD ["bash"]
+
+==============================================================
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.1 .
+[root@ip-10-20-10-205 Docker]# docker run -dit --name cont1 myimage:0.1
+ff3cb45d6aed1607b0a6bfd20f19ce507b3ed7718d9a711800be0dfed5b44711
+[root@ip-10-20-10-205 Docker]# docker exec -it cont1 bash
+root@ff3cb45d6aed:/Renuka#
