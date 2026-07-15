@@ -1,11 +1,16 @@
-# Base image
-FROM ubuntu:20.04
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+RUN apt-get update -y 
+CMD ["bash"]
+--------------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.1 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1
 
-# Add metadata about the image
-LABEL maintainer="Kadali <kadali@example.com>" \
-      version="1.0" \
-      description="Example Dockerfile using FROM, LABEL, and RUN instructions."
-
-# Execute commands inside the image during build
-RUN apt-get update && apt-get install -y curl
-
+====================================================================
+[root@ip-10-20-10-205 Docker]# cat Dockerfile 
+FROM ubuntu:latest
+LABEL Maintained By = "Durga rao"
+LABEL Version = "1.0"
+RUN apt-get update -y 
+CMD ["bash"]
