@@ -1,16 +1,9 @@
-FROM ubuntu:20.04
-
-LABEL maintainer="Kadali <kadali@example.com>" \
-      description="Example showing WORKDIR usage"
-
-# Set working directory
-WORKDIR /app
-
-# Copy files into /app
-COPY . .
-
-# Run commands inside /app
-RUN echo "Hello from WORKDIR" > message.txt
-
+ROM ubuntu:latest
+RUN apt-get update
+WORKDIR /ynd
+RUN echo "hello world WORKDIR" > message.txt
 CMD ["cat", "message.txt"]
-
+-------------------------------------------------------
+[root@ip-10-20-10-205 Docker]# docker build -t myimage:0.1 .
+[root@ip-10-20-10-205 Docker]# docker run myimage:0.1
+hello world WORKDIR
