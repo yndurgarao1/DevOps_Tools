@@ -1,0 +1,11 @@
+services:
+  OS:
+    container_name: ubuntu-cont
+    image: ubuntu:latest
+    command: sleep infinity
+  web:
+    container_name: web-nginx
+    image: nginx:latest
+    ports:
+      - 8800:80
+

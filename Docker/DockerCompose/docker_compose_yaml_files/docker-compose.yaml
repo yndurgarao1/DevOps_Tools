@@ -1,0 +1,5 @@
+services:
+  OS:
+    container_name: ubuntu-cont
+    image: ubuntu:latest
+    command: sleep infinity

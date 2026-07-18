@@ -1,0 +1,19 @@
+services:
+  OS:
+    container_name: ubuntu-cont
+    image: ubuntu:latest
+    command: sleep infinity
+    volumes:
+      - myvolume1:/ynd
+    networks:
+      - mynetwork1
+  web:
+    container_name: web-nginx
+    image: nginx:latest
+    ports:
+      - 8800:80
+volumes:
+  myvolume1:
+networks:
+  mynetwork1:
+    driver: bridge
