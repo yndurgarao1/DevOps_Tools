@@ -1,0 +1,6 @@
+FROM ubuntu
+ARG VALUE
+RUN apt-get update && apt-get install -y $VALUE
+CMD ["bash"]
+
+

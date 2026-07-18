@@ -1,0 +1,5 @@
+FROM ubuntu:latest
+RUN apt-get update 
+WORKDIR /renuka
+COPY COPY .
+CMD ["bash"]

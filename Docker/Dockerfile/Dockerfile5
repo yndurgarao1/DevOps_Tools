@@ -1,0 +1,4 @@
+FROM ubuntu:latest
+RUN apt-get update 
+ENTRYPOINT ["echo", "Hello World ENTRYPOINT execution"]
+CMD ["echo", "Hello World CMD execution"]

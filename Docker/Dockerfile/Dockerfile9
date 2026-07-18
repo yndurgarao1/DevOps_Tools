@@ -1,0 +1,5 @@
+FROM ubuntu:latest
+RUN apt-get update
+WORKDIR /DURGA
+ADD https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_386.zip .
+CMD ["bash"]
