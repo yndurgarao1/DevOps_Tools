@@ -1,0 +1,8 @@
+####################Docker composer Installation Steps####################
+Download the standalone binary:
+	#sudo curl -sL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m) -o /usr/local/bin/docker-compose
+Make it executable:
+	#sudo chmod +x /usr/local/bin/docker-compose
+Verify installation:
+	#docker-compose --version
+	

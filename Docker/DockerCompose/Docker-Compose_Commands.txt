@@ -1,0 +1,21 @@
+Docker-Compose Commands
+===============================================
+$docker-compose -f example.yml up -d 
+Explanation:	
+	-f ==> Specifies which Compose file to use. By default, it looks for docker-compose.yml, but here you’re explicitly telling it to use example.yml
+	-d ==> Detached mode. Runs containers in the background instead of attaching to their logs in the terminal.
+	up ==> Builds (if needed) and starts the services defined in the file. It also creates the network and volumes specified
+================================================
+$docker-compose up -d 
+Explanation:
+	it looks for docker-compose.yml and creates containers and networks
+================================================
+$docker-compose down  ==> to stop and delete the containers
+$docker-compose -f example.yml down ==> it will stop and deleted the containers nunder example.yml file
+$docker-compose ps ==> to list running containers listed on docker-compose.yml
+$docker-compose -f example.yml ps ==> to list running containers under example.yml file
+$docker compose logs -f <Service_Name>  ==> Tail logs of a specific service
+$docker compose restart <Service_Name> ==> Restart a service after config change
+$docker-compose stop ==> Start or stop existing services without recreating them.
+$docker-compose images ==> list down images
+
