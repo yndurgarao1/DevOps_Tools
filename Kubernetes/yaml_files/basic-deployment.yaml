@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: my-deployment-1
+  labels:
+    type: Operating-System-2
+    client: YND-2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: Operating-System-2
+      client: YND-2
+  template:
+    metadata:
+      labels:
+        type: Operating-System-2
+        client: YND-2
+    spec:
+      containers:
+        - name: ynd-ubuntu-cont
+          image: ubuntu:26.04
+          command: ["sleep", "infinity"]
+

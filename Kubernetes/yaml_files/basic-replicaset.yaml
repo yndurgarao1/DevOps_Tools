@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-replicaset-1
+  labels:
+    type: Operaing-System-1
+    client: YND-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: Operating-System-1
+      client: YND-1
+  template:
+    metadata:
+      labels:
+        type: Operating-System-1
+        client: YND-1
+    spec:
+      containers:
+        - name: ynd-replica-container-ubuntu
+          image: ubuntu:24.04
+          command: ["sleep", "infinity"]
+
+

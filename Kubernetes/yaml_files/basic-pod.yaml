@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: mypod-1
+  labels:
+    type: Operating-System
+    client: YND
+spec:
+  containers:
+    - name: ynd-ubutu-container
+      image: ubuntu:22.04
+      command: ["sleep", "infinity"]
+
+
