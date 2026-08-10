@@ -138,7 +138,19 @@ resource "aws_instance" "K8S_EC2_Master_Node" {
               yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
               systemctl enable kubelet
               systemctl start kubelet
-              EOF  
+                
+			  			  
+              # Initialize cluster (only runs on first node)
+              kubeadm init > /home/ec2-user/cluster_token.txt
+
+              # Configure kubectl for root
+              export KUBECONFIG=/etc/kubernetes/admin.conf
+              echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> ~/.bash_profile
+
+              # Apply Calico CNI
+              kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.2/manifests/calico.yaml
+             
+              EOF
 
   tags = {
     Name = "Terraform_K8S_EC2_Master_Node"
