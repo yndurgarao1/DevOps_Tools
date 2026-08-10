@@ -1,6 +1,6 @@
 #To get all node details [ In master node we need to execute ]
 Here control-plane ==> master node and remaining are worker nodes 
-[root@ip-50-55-50-192 ~]# kubectl get node
+[root@ip-50-55-50-192 ~]# kubectl get nodes
 NAME                           STATUS   ROLES           AGE     VERSION
 ip-50-55-50-116.ec2.internal   Ready    <none>          9m27s   v1.28.15
 ip-50-55-50-119.ec2.internal   Ready    <none>          9m14s   v1.28.15
@@ -36,7 +36,7 @@ ytg0be.cx8g4efmx3x63q57   23h         2026-06-08T14:12:49Z   authentication,sign
 [root@ip-50-55-50-192 ~]#
 
 =======================================
-#To create pod 
+#To create pod with commandline 
 $kubectl run <pod_name> --image=<Image_name>:<Tag>
 $kubectl run mypod1 --image=nginx:latest
 $kubectl run mypod2 --image nginx:latest
@@ -45,7 +45,125 @@ $kubectl run mypod2 --image nginx:latest
 $kubectl get pods 
 $kubectl get pods -o wide 
 $kubectl get pods --output wide
+
+#To get pod information
 $kubectl describe pod <pod_name>
+===========================================================================
+[root@ip-10-20-10-76 ec2-user]# cat pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod1
+  labels:
+    type: frontend
+    client: IBM
+spec:
+  containers:
+    - name: nginx-cont
+      image: nginx:latest
+
+[root@ip-10-20-10-76 ec2-user]#kubectl apply -f pod.yaml (or)
+[root@ip-10-20-10-76 ec2-user]#kubectl create -f pod.yaml
+pod/mypod1 created
+
+[root@ip-10-20-10-76 ec2-user]# kubectl get pods
+NAME     READY   STATUS    RESTARTS   AGE
+mypod1   1/1     Running   0          87s
+
+[root@ip-10-20-10-76 ec2-user]# kubectl get pods --output wide
+NAME     READY   STATUS    RESTARTS   AGE    IP              NODE                           NOMINATED NODE   READINESS GATES
+mypod1   1/1     Running   0          115s   192.168.141.1   ip-10-20-10-106.ec2.internal   <none>           <none>
+
+
+[root@ip-10-20-10-76 ec2-user]# cat Replicaset.yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-replica-set-1
+  labels:
+    type: frontend
+    client: IBM
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: frontend
+      client: IBM
+  template:
+    metadata:
+      labels:
+        type: frontend
+        client: IBM
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+
+[root@ip-10-20-10-76 ec2-user]# kubectl get replicaset
+NAME               DESIRED   CURRENT   READY   AGE
+my-replica-set-1   3         3         3       5m17s
+[root@ip-10-20-10-76 ec2-user]# kubectl get rs -o wide
+NAME               DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES         SELECTOR
+my-replica-set-1   3         3         3       5m50s   nginx        nginx:latest   client=IBM,type=frontend
+
+[root@ip-10-20-10-76 ec2-user]# kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP                NODE                           NOMINATED NODE   READINESS GATES
+my-replica-set-1-gbkg7   1/1     Running   0          8m21s   192.168.94.133    ip-10-20-10-61.ec2.internal    <none>           <none>
+my-replica-set-1-j95c7   1/1     Running   0          7m33s   192.168.94.134    ip-10-20-10-61.ec2.internal    <none>           <none>
+my-replica-set-1-k4rqd   1/1     Running   0          7m33s   192.168.141.5     ip-10-20-10-106.ec2.internal   <none>           <none>
+
+[root@ip-10-20-10-76 ec2-user]# kubectl scale replicaset my-replica-set-1 --replicas=5
+replicaset.apps/my-replica-set-1 scaled
+
+[root@ip-10-20-10-76 ec2-user]# kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP                NODE                           NOMINATED NODE   READINESS GATES
+my-replica-set-1-gbkg7   1/1     Running   0          10m     192.168.94.133    ip-10-20-10-61.ec2.internal    <none>           <none>
+my-replica-set-1-j95c7   1/1     Running   0          9m17s   192.168.94.134    ip-10-20-10-61.ec2.internal    <none>           <none>
+my-replica-set-1-k4rqd   1/1     Running   0          9m17s   192.168.141.5     ip-10-20-10-106.ec2.internal   <none>           <none>
+my-replica-set-1-mxwfz   1/1     Running   0          16s     192.168.141.6     ip-10-20-10-106.ec2.internal   <none>           <none>
+my-replica-set-1-wlmb7   1/1     Running   0          10m     192.168.110.132   ip-10-20-10-209.ec2.internal   <none>           <none>
+
+
+
+
+
+
+
+
+
+   46  vi pod.yaml
+   47  kubectll create -f pod.yaml
+   48  kubectl create -f pod.yaml
+   49  vi pod.yaml
+   50  kubecl create -f pod.yaml
+   51  kubectl apply -f pod.yaml
+   52  kubectl get pods
+   53  kubectl delete pod mypod1
+   54  clear
+   55  kubectl create -f pod.yaml
+   56  vi pod.yaml
+   57  vi pod.yaml
+   58  kubectl create -f pod.yaml
+   59  kubectl get pods
+   60  kubectl get pods -o wide
+   61  clear
+   62  kubectl get pods
+   63  kubectl delete pod mypod1
+   64  ping google.com
+   65  clear
+   66  clear
+   67  kubectl get pods
+   68  kubectl run mypod1 --image nginx:latest --port=80
+   69  kubectl get pods -o wide
+   70  curl 100.54.140.112:80
+   71  curl 192.168.110.129:80
+   72  kubectl port-forward pod/mypod1 8800:80
+   73  http://localhost:8800
+   74  vi pod.yaml
+   75  kubectl get pods
+   76  vi Replicaset.yaml
+   77  cat pod.yaml
+   78  history
 
 
 
