@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: size-volume
+  labels:
+    type: volume
+    client: ynd
+spec:
+  containers:
+    - name: volume-pod
+      image: ubuntu:22.04
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: myvolume2
+          mountPath: /file1
+  volumes:
+    - name: myvolume2
+      emptyDir:
+        sizeLimit: 1Gi
