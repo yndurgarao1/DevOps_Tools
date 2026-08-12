@@ -18,3 +18,25 @@ spec:
       hostPath:
         path: /home/ec2-user/volume-test
         type: DirectoryOrCreate
+=====================================================================
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-hostpath
+  labels:
+    type: hostpath-volume
+    clinet: ynd
+spec:
+  containers:
+    - name: hostpath-volume-pod
+      image: ubuntu:22.04
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: myvolume1
+          mountPath: /durga
+  volumes:
+    - name: myvolume1
+      hostPath:
+        path: /home/ec2-user/renuka
+        type: DirectoryOrCreate
+
