@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-hostpath
+  labels:
+    type: volume
+    client: durga
+spec:
+  containers:
+    - name: volume-pod
+      image: ubuntu:22.04
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: myvolume-1
+          mountPath: /ynd
+  volumes:
+    - name: myvolume-1
+      hostPath:
+        path: /home/ec2-user/volume-test
+        type: DirectoryOrCreate

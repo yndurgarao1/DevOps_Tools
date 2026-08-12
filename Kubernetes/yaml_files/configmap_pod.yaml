@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap-1
+data:
+  ENV: "Development"
+  value1: "Durga"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-pod
+  labels:
+    type: os-pod
+    client: ynd
+spec:
+  containers:
+    - name: ubuntu-pod
+      image: ubuntu:22.04
+      env:
+        -  name: ENV_Name
+           valueFrom:
+             configMapKeyRef:
+               name: myconfigmap-1
+               key: ENV
+      command: ["sleep", "infinity"]
+
