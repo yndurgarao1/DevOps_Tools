@@ -1,2 +1,31 @@
+Prometheus is a monitoring system that collects and stores metrics, while Grafana is a visualization platform that queries those metrics (and many other sources) to build dashboards and alerts. To setup prometheus or Grafana first we need to setup helm in master node
 Helm Setup
+URL: https://helm.sh/docs/intro/
+https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack ==> Prometheus Setup
 =========================
+Installation
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+helm version
+helm version --short
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo list
+helm repo update
+export KUBECONFIG=/etc/kubernetes/admin.conf
+###Install Helm Chart#####
+helm install [RELEASE_NAME] oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+    helm install durga oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+kubectl get service 
+## edit Grafana ad Prometheus service from ClusterIP to NodePort for access 
+kubectl edit service durga-grafana ==> ClusterIp to NodePort
+kubectl edit service durga-kube-prometheus-stac-prometheus  ==> ClusterIp to NodePort
+kubectl get secret durga-grafana
+kubectl get secret durga-grafana -o yaml
+echo "YWRtaW4=" | base64 -d  ==> To get username for grafana
+echo "N1Ayb2tjREJYSFc5OGszVTE1WEZ3NTJUOEZoUklnczQwdXZuUHR6eQ==" | base64 -d  ==> to get password for grafana
+###get the worker node ip address and browse it for grafana login with node port 
+### get the worker node ip address and browse it for Prometheus
+
+For dashoard in Grafana
+https://grafana.com/grafana/dashboards/8588  [ to import dashboard to our grafana]
