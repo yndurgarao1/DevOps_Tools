@@ -1,1 +1,25 @@
 Terrform setup in AWS EC2 Instance
+==========================================
+sudo su 
+yum update -y
+cd /usr/local/bin
+sudo wget https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_386.zip
+unzip terraform_1.15.8_linux_386.zip
+cd /home/ec2-user
+terraform -v
+cd /home/ec2-user
+yum install -y git 
+git clone https://github.com/yndurgarao1/DevOps_Tools.git
+cd DevOps_Tools/Terrform_EC2_Scripts
+cp Cluster_Setup.tf /home/ec2-user
+cd /home/ec2-user
+vi provider.tf
+provider "aws" {
+        region = "us-east-1"
+        access_key = "AKIAWL6OSDPHJ5E44XQM"
+        secret_key = "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"
+}
+terraform init
+terraform validate
+terraform plan 
+terraform apply --auto-approve
