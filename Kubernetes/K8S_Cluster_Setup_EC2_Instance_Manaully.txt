@@ -1,5 +1,4 @@
-#######Kubernetes Installation on Amazon Installation########
-
+***********Kubernetes Cluster Setup on Amazon EC2 Instance *********************
 #yum update -y
 	yum 	→ The package manager used in RHEL/CentOS/Amazon Linux systems (older versions; newer ones use dnf).
 	update 	→ Tells yum to update all installed packages to the latest available versions from the configured repositories.
