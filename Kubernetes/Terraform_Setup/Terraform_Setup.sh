@@ -6,9 +6,6 @@ sudo wget https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux
 mv terraform_1.15.8_linux_386.zip /usr/local/bin/
 cd /usr/local/bin
 unzip terraform_1.15.8_linux_386.zip
-cd /home/ec2-user
-git clone https://github.com/yndurgarao1/DevOps_Tools.git
-sleep 60
 mkdir AWS_Terraform
 cp /home/ec2-user/DevOps_Tools/Kubernetes/Terraform_Setup/AWS_Provider.sh /home/ec2-user/AWS_Terraform
 cp /home/ec2-user/DevOps_Tools/Kubernetes/K8S_CLuster_Setup_Terraform_Code/K8S_Cluster_Setup.tf /home/ec2-user/AWS_Terraform
