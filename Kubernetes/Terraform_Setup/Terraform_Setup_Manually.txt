@@ -7,18 +7,21 @@ sudo wget https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux
 unzip terraform_1.15.8_linux_386.zip
 cd /home/ec2-user
 terraform -v
+===============================================
 cd /home/ec2-user
 yum install -y git 
 git clone https://github.com/yndurgarao1/DevOps_Tools.git
-cd DevOps_Tools/Terrform_EC2_Scripts
-cp Cluster_Setup.tf /home/ec2-user
+cd DevOps_Tools/Kubernetes/K8S_CLuster_Setup_Terraform_Code
+cp K8S_Cluster_Setup_Terraform_Code.tf /home/ec2-user
 cd /home/ec2-user
+====================================================
 vi provider.tf
 provider "aws" {
         region = "us-east-1"
         access_key = "AKIAWL6OSDPHDWZUFWRA"
         secret_key = "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"
 }
+========================================================
 terraform init
 terraform validate
 terraform plan 
