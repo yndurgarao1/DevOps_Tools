@@ -15,7 +15,7 @@ helm repo update
 export KUBECONFIG=/etc/kubernetes/admin.conf
 ###Install Helm Chart#####
 helm install [RELEASE_NAME] oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
-    helm install durga oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+    helm install ynd oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
 kubectl get service 
 ## edit Grafana ad Prometheus service from ClusterIP to NodePort for access 
 kubectl edit service durga-grafana ==> ClusterIp to NodePort
