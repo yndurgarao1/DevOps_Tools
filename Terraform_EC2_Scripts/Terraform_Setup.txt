@@ -16,8 +16,8 @@ cd /home/ec2-user
 vi provider.tf
 provider "aws" {
         region = "us-east-1"
-        access_key = "AKIAWL6OSDPHJ5E44XQM"
-        secret_key = "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"
+        access_key = "AKIAWL6OSDPHDWZUFWRA"
+        secret_key = "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"
 }
 terraform init
 terraform validate

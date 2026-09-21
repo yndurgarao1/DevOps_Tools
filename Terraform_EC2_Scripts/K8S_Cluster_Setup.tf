@@ -142,6 +142,7 @@ resource "aws_instance" "K8S_EC2_Master_Node" {
               # Initialize cluster (only runs on first node)
               kubeadm init > /home/ec2-user/cluster_token.txt
 
+              sleep 120
               # Configure kubectl for root
               export KUBECONFIG=/etc/kubernetes/admin.conf
               echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> .bash_profile
