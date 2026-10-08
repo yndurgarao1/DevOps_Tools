@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-configmap
+data:
+  Runway: IGL85R
+  Pre-Prod: IGL82N
+  Staging: IGL84R
+  Production: IGL80P
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  labels:
+    type: frontend-deployment
+    client: Durga
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      type: frontend-deployment
+      client: Durga
+  template:
+    metadata:
+      labels:
+        type: frontend-deployment
+        client: Durga
+    spec:
+      containers:
+        - name: deployment-cont
+          image: ubuntu:latest
+          command: ["sleep", "infinity"]
+          env:
+            - name: RUNWAY_INSTANCE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: Runway
+            - name: PRE_PROD_INSTANCE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmap
+                  key: Pre-Prod
