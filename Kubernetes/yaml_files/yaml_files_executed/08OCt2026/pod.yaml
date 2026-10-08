@@ -1,0 +1,12 @@
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: my-pod-1
+  labels:
+    type: pod-frontend
+    client: Durga
+spec:
+  containers:
+    - name: pod-cont
+      image: ubuntu:latest
+      command: ["sleep", "infinity"]

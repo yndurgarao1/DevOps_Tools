@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nodeport-deployment
+  labels:
+    type: nodeport-frontend
+    client: rao
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      type: nodeport-frontend
+      client: rao
+  template: 
+    metadata:
+      labels:
+        type: nodeport-frontend
+        client: rao
+    spec: 
+      containers: 
+        - name: nodeport-cont
+          image: nginx:latest
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: nodeport-service
+  labels:
+    type: nodeport-frontend
+    client: rao
+spec:
+  type: NodePort
+  selector:
+    type: nodeport-frontend
+    client: rao
+  ports:
+    - port: 80
+
