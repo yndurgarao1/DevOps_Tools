@@ -1,3 +1,4 @@
+#common steps for master node aand worker node 
 root@ip-4-8-4-11:/home/ubuntu# apt update -y
 root@ip-4-8-4-11:/home/ubuntu# cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
@@ -52,6 +53,8 @@ root@ip-4-8-4-11:/home/ubuntu# kubelet --version
 root@ip-4-8-4-11:/home/ubuntu# kubeadm version
 root@ip-4-8-4-11:/home/ubuntu# sudo apt-mark hold kubelet kubeadm kubectl
 root@ip-4-8-4-11:/home/ubuntu# sudo systemctl enable kubelet && sudo systemctl start kubelet
+
+#specific for master node only 
 root@ip-4-8-4-11:/home/ubuntu# kubeadm init 
 root@ip-4-8-4-170:/home/ubuntu# export KUBECONFIG=/etc/kubernetes/admin.conf
 root@ip-4-8-4-170:/home/ubuntu# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> .bashrc
