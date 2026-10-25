@@ -1,0 +1,59 @@
+root@ip-4-8-4-11:/home/ubuntu# apt update -y
+root@ip-4-8-4-11:/home/ubuntu# cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+root@ip-4-8-4-11:/home/ubuntu# sudo modprobe overlay
+root@ip-4-8-4-11:/home/ubuntu# sudo modprobe br_netfilter
+# sysctl params required by setup, params persist across reboots
+root@ip-4-8-4-11:/home/ubuntu# cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+# Apply sysctl params without reboot
+root@ip-4-8-4-11:/home/ubuntu# sudo sysctl --system
+
+# Verify that the br_netfilter, overlay modules are loaded by running the following commands:
+root@ip-4-8-4-11:/home/ubuntu# lsmod | grep br_netfilter
+root@ip-4-8-4-11:/home/ubuntu# lsmod | grep overlay
+
+# Verify that the net.bridge.bridge-nf-call-iptables, net.bridge.bridge-nf-call-ip6tables, and net.ipv4.ip_forward system variables are set to 1 in your sysctl config by running the following command:
+root@ip-4-8-4-11:/home/ubuntu# sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+root@ip-4-8-4-11:/home/ubuntu# apt install -y docker.io
+root@ip-4-8-4-11:/home/ubuntu# systemctl enable docker && systemctl start docker
+root@ip-4-8-4-11:/home/ubuntu# systemctl status docker
+root@ip-4-8-4-11:/home/ubuntu# swapoff -a
+root@ip-4-8-4-11:/home/ubuntu# vi /etc/docker/daemon.json
+-------------------------------------------------
+{
+ "exec-opts": ["native.cgroupdriver=systemd"]
+}
+-------------------------------------------------
+root@ip-4-8-4-11:/home/ubuntu# sudo systemctl restart docker
+root@ip-4-8-4-11:/home/ubuntu# sudo apt install -y apt-transport-https ca-certificates curl software-properties-common lvm2
+root@ip-4-8-4-11:/home/ubuntu# sudo mkdir -p /etc/containerd
+root@ip-4-8-4-11:/home/ubuntu# containerd config default | sudo tee /etc/containerd/config.toml
+root@ip-4-8-4-11:/home/ubuntu# sudo vi /etc/containerd/config.toml
+-----------------------
+check SystemdCgroup = false and make it chnage to SystemdCgroup = true
+	
+Aligns runtime with systemd for cgroup management
+-------------------------------------------------
+root@ip-4-8-4-11:/home/ubuntu# sudo systemctl restart containerd
+root@ip-4-8-4-11:/home/ubuntu# sudo systemctl enable containerd
+root@ip-4-8-4-11:/home/ubuntu# sudo systemctl status containerd
+root@ip-4-8-4-11:/home/ubuntu# sudo mkdir -p /etc/apt/keyrings
+root@ip-4-8-4-11:/home/ubuntu# curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+root@ip-4-8-4-11:/home/ubuntu# echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+root@ip-4-8-4-11:/home/ubuntu# apt install -y kubelet kubectl kubeadm 
+root@ip-4-8-4-11:/home/ubuntu# kubectl version --client
+root@ip-4-8-4-11:/home/ubuntu# kubelet --version
+root@ip-4-8-4-11:/home/ubuntu# kubeadm version
+root@ip-4-8-4-11:/home/ubuntu# sudo apt-mark hold kubelet kubeadm kubectl
+root@ip-4-8-4-11:/home/ubuntu# sudo systemctl enable kubelet && sudo systemctl start kubelet
+root@ip-4-8-4-11:/home/ubuntu# kubeadm init 
+root@ip-4-8-4-170:/home/ubuntu# export KUBECONFIG=/etc/kubernetes/admin.conf
+root@ip-4-8-4-170:/home/ubuntu# echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> .bashrc
+root@ip-4-8-4-11:/home/ubuntu#kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.2/manifests/calico.yaml
+
