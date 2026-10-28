@@ -75,13 +75,15 @@
 #sudo systemctl restart containerd
 #sudo systemctl enable containerd
 #sudo systemctl status containerd
+Note: Replace the version number with the specific Kubernetes patch version you want to install.
+#K8S_Version=1.34
 #cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+baseurl=https://pkgs.k8s.io/core:/stable:/$K8S_Version/rpm/
 enabled=1
 gpgcheck=1
-gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+gpgkey=https://pkgs.k8s.io/core:/stable:/$K8S_Version/rpm/repodata/repomd.xml.key
 exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
 EOF
 
@@ -97,8 +99,15 @@ EOF
 #setenforce 0
 	setenforce → Command to change the mode of SELinux (Security-Enhanced Linux) at runtime.
 	0 → Disables SELinux enforcement, switching it into permissive mode.
-	
-#yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+Display k8s version listed in package manager
+#sudo yum list --showduplicates kubelet --disableexcludes=kubernetes
+
+Note: To install latest version in package manager 	
+#yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 
+Note: Specific patch version installation
+#yum install -y kubeadm-1.34.2-150500.1.1 kubectl-1.34.2-150500.1.1 kubelet-1.34.2-150500.1.1 --disableexcludes=kubernetes
+
 #systemctl enable kubelet && systemctl start kubelet
 #kubeadm init
 	To start using your cluster, you need to run the following as a regular user:
