@@ -5,10 +5,9 @@ VPC Setup
 
 Security group for master node: 
 
-  <img width="1914" height="815" alt="image" src="https://github.com/user-attachments/assets/b6dcc1d7-a96b-43ba-bd4d-cb4662cb0e16" />
+  <img width="1913" height="720" alt="image" src="https://github.com/user-attachments/assets/94b7795e-fe45-4722-b61a-f90a52c49fdb" />
 
 Security group for worker node:
   
-  <img width="1849" height="758" alt="image" src="https://github.com/user-attachments/assets/6042b1b9-f0bb-41c4-85c3-8d9d4c3693d3" />
-
+  <img width="1904" height="714" alt="image" src="https://github.com/user-attachments/assets/f0e0ff1a-06f3-4429-8549-1c453bf92753" />
 
