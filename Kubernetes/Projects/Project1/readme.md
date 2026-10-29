@@ -1,5 +1,6 @@
 
+VPC Setup 
 
-<img width="1897" height="858" alt="image" src="https://github.com/user-attachments/assets/56f07f03-44a5-4692-8bb5-57ce4690e1ea" />
+<img width="1889" height="902" alt="image" src="https://github.com/user-attachments/assets/52e13f6b-67d8-409f-9dc0-9a3930b80147" />
 
 
