@@ -1,0 +1,279 @@
+[ec2-user@ip-20-30-30-54 ~]$ sudo su
+
+
+[root@ip-20-30-30-54 ec2-user]# swapoff -a
+
+
+[root@ip-20-30-30-54 ec2-user]# dnf install -y iproute-tc
+Amazon Linux 2023 Kernel Livepatch repository                                                                                                                                                          758 kB/s |  89 kB     00:00
+Last metadata expiration check: 0:00:01 ago on Thu Oct 29 04:14:45 2026.
+Dependencies resolved.
+=======================================================================================================================================================================================================================================
+ Package                                                       Architecture                                  Version                                                          Repository                                          Size
+=======================================================================================================================================================================================================================================
+Installing:
+ iproute-tc                                                    x86_64                                        6.10.0-319.amzn2023.0.1                                          amazonlinux                                        434 k
+Installing dependencies:
+ iptables-libs                                                 x86_64                                        1.8.8-3.amzn2023.0.2                                             amazonlinux                                        401 k
+ libnetfilter_conntrack                                        x86_64                                        1.0.8-2.amzn2023.0.2                                             amazonlinux                                         58 k
+ libnfnetlink                                                  x86_64                                        1.0.1-19.amzn2023.0.2                                            amazonlinux                                         30 k
+
+Transaction Summary
+=======================================================================================================================================================================================================================================
+Install  4 Packages
+
+Total download size: 922 k
+Installed size: 2.9 M
+Downloading Packages:
+(1/4): libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64.rpm                                                                                                                                          1.9 MB/s |  58 kB     00:00
+(2/4): iptables-libs-1.8.8-3.amzn2023.0.2.x86_64.rpm                                                                                                                                                    11 MB/s | 401 kB     00:00
+(3/4): iproute-tc-6.10.0-319.amzn2023.0.1.x86_64.rpm                                                                                                                                                   9.5 MB/s | 434 kB     00:00
+(4/4): libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64.rpm                                                                                                                                                   1.0 MB/s |  30 kB     00:00
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                                  7.7 MB/s | 922 kB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                                               1/1
+  Installing       : libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64                                                                                                                                                                     1/4
+  Installing       : libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64                                                                                                                                                            2/4
+  Installing       : iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                                                                                                                                                                     3/4
+  Installing       : iproute-tc-6.10.0-319.amzn2023.0.1.x86_64                                                                                                                                                                     4/4
+  Running scriptlet: iproute-tc-6.10.0-319.amzn2023.0.1.x86_64                                                                                                                                                                     4/4
+  Verifying        : iproute-tc-6.10.0-319.amzn2023.0.1.x86_64                                                                                                                                                                     1/4
+  Verifying        : iptables-libs-1.8.8-3.amzn2023.0.2.x86_64                                                                                                                                                                     2/4
+  Verifying        : libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64                                                                                                                                                            3/4
+  Verifying        : libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64                                                                                                                                                                     4/4
+
+Installed:
+  iproute-tc-6.10.0-319.amzn2023.0.1.x86_64              iptables-libs-1.8.8-3.amzn2023.0.2.x86_64              libnetfilter_conntrack-1.0.8-2.amzn2023.0.2.x86_64              libnfnetlink-1.0.1-19.amzn2023.0.2.x86_64
+
+Complete!
+
+
+[root@ip-20-30-30-54 ec2-user]# modprobe overlay
+[root@ip-20-30-30-54 ec2-user]# modprobe br_netfilter
+
+
+[root@ip-20-30-30-54 ec2-user]# cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+overlay
+br_netfilter
+
+
+[root@ip-20-30-30-54 ec2-user]# cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+
+
+[root@ip-20-30-30-54 ec2-user]# sysctl --system
+* Applying /etc/sysctl.d/00-defaults.conf ...
+kernel.printk = 8 4 1 7
+kernel.panic = 5
+net.ipv4.neigh.default.gc_thresh1 = 0
+net.ipv6.neigh.default.gc_thresh1 = 0
+net.ipv4.neigh.default.gc_thresh2 = 15360
+net.ipv6.neigh.default.gc_thresh2 = 15360
+net.ipv4.neigh.default.gc_thresh3 = 16384
+net.ipv6.neigh.default.gc_thresh3 = 16384
+net.ipv4.tcp_wmem = 4096 20480 4194304
+net.ipv4.ip_default_ttl = 127
+kernel.unprivileged_bpf_disabled = 1
+* Applying /usr/lib/sysctl.d/10-default-yama-scope.conf ...
+kernel.yama.ptrace_scope = 0
+* Applying /usr/lib/sysctl.d/50-coredump.conf ...
+kernel.core_pattern = |/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h
+kernel.core_pipe_limit = 16
+fs.suid_dumpable = 2
+* Applying /usr/lib/sysctl.d/50-default.conf ...
+kernel.sysrq = 16
+kernel.core_uses_pid = 1
+net.ipv4.conf.default.rp_filter = 2
+sysctl: setting key "net.ipv4.conf.all.rp_filter": Invalid argument
+net.ipv4.conf.default.accept_source_route = 0
+sysctl: setting key "net.ipv4.conf.all.accept_source_route": Invalid argument
+net.ipv4.conf.default.promote_secondaries = 1
+sysctl: setting key "net.ipv4.conf.all.promote_secondaries": Invalid argument
+net.ipv4.ping_group_range = 0 2147483647
+net.core.default_qdisc = fq_codel
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+fs.protected_regular = 1
+fs.protected_fifos = 1
+* Applying /usr/lib/sysctl.d/50-libkcapi-optmem_max.conf ...
+net.core.optmem_max = 81920
+* Applying /usr/lib/sysctl.d/50-pid-max.conf ...
+kernel.pid_max = 4194304
+* Applying /usr/lib/sysctl.d/60-amazon-linux-coredump.conf ...
+fs.suid_dumpable = 0
+* Applying /etc/sysctl.d/99-sysctl.conf ...
+* Applying /etc/sysctl.d/k8s.conf ...
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+* Applying /etc/sysctl.conf ...
+
+
+[root@ip-20-30-30-54 ec2-user]# setenforce 0
+[root@ip-20-30-30-54 ec2-user]# sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+
+[root@ip-20-30-30-54 ec2-user]# cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key
+EOF
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key
+
+
+[root@ip-20-30-30-54 ec2-user]# cat <<EOF | tee /etc/yum.repos.d/cri-o.repo
+[cri-o]
+name=CRI-O
+baseurl=https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.34/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.34/rpm/repodata/repomd.xml.key
+EOF
+[cri-o]
+name=CRI-O
+baseurl=https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.34/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.34/rpm/repodata/repomd.xml.key
+
+
+[root@ip-20-30-30-54 ec2-user]# dnf install -y cri-o kubelet-1.34.8-150500.1.1 kubeadm-1.34.8-150500.1.1 kubectl-1.34.8-150500.1.1 --disableexcludes=kubernetes
+CRI-O                                                                                                                                                                                                   32 kB/s |  14 kB     00:00
+Kubernetes                                                                                                                                                                                             302 kB/s |  33 kB     00:00
+Dependencies resolved.
+=======================================================================================================================================================================================================================================
+ Package                                                    Architecture                                    Version                                                         Repository                                            Size
+=======================================================================================================================================================================================================================================
+Installing:
+ cri-o                                                      x86_64                                          1.34.15-150500.2.1                                              cri-o                                                 26 M
+ kubeadm                                                    x86_64                                          1.34.8-150500.1.1                                               kubernetes                                            12 M
+ kubectl                                                    x86_64                                          1.34.8-150500.1.1                                               kubernetes                                            11 M
+ kubelet                                                    x86_64                                          1.34.8-150500.1.1                                               kubernetes                                            13 M
+Installing dependencies:
+ iptables-nft                                               x86_64                                          1.8.8-3.amzn2023.0.2                                            amazonlinux                                          183 k
+ kubernetes-cni                                             x86_64                                          1.7.1-150500.1.1                                                kubernetes                                           8.6 M
+ libnftnl                                                   x86_64                                          1.2.2-2.amzn2023.0.2                                            amazonlinux                                           84 k
+Installing weak dependencies:
+ container-selinux                                          noarch                                          4:2.245.0-1.amzn2023                                            amazonlinux                                           58 k
+
+Transaction Summary
+=======================================================================================================================================================================================================================================
+Install  8 Packages
+
+Total download size: 71 M
+Installed size: 357 M
+Downloading Packages:
+(1/8): libnftnl-1.2.2-2.amzn2023.0.2.x86_64.rpm                                                                                                                                                        3.6 MB/s |  84 kB     00:00
+(2/8): container-selinux-2.245.0-1.amzn2023.noarch.rpm                                                                                                                                                 2.3 MB/s |  58 kB     00:00
+(3/8): iptables-nft-1.8.8-3.amzn2023.0.2.x86_64.rpm                                                                                                                                                    5.5 MB/s | 183 kB     00:00
+(4/8): kubeadm-1.34.8-150500.1.1.x86_64.rpm                                                                                                                                                             79 MB/s |  12 MB     00:00
+(5/8): kubectl-1.34.8-150500.1.1.x86_64.rpm                                                                                                                                                             54 MB/s |  11 MB     00:00
+(6/8): kubelet-1.34.8-150500.1.1.x86_64.rpm                                                                                                                                                             67 MB/s |  13 MB     00:00
+(7/8): kubernetes-cni-1.7.1-150500.1.1.x86_64.rpm                                                                                                                                                       48 MB/s | 8.6 MB     00:00
+(8/8): cri-o-1.34.15-150500.2.1.x86_64.rpm                                                                                                                                                              14 MB/s |  26 MB     00:01
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                                   32 MB/s |  71 MB     00:02
+CRI-O                                                                                                                                                                                                   22 kB/s | 2.4 kB     00:00
+Importing GPG key 0x40A2B579:
+ Userid     : "isv:cri-o OBS Project <isv:cri-o@build.opensuse.org>"
+ Fingerprint: 85B6 7D5C 5010 0B1A C8CE FE49 CBA9 C856 40A2 B579
+ From       : https://download.opensuse.org/repositories/isv:/cri-o:/stable:/v1.34/rpm/repodata/repomd.xml.key
+Key imported successfully
+Kubernetes                                                                                                                                                                                              45 kB/s | 1.7 kB     00:00
+Importing GPG key 0x9A296436:
+ Userid     : "isv:kubernetes OBS Project <isv:kubernetes@build.opensuse.org>"
+ Fingerprint: DE15 B144 86CD 377B 9E87 6E1A 2346 54DA 9A29 6436
+ From       : https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                                               1/1
+  Installing       : kubernetes-cni-1.7.1-150500.1.1.x86_64                                                                                                                                                                        1/8
+  Installing       : libnftnl-1.2.2-2.amzn2023.0.2.x86_64                                                                                                                                                                          2/8
+  Installing       : iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                                                                                                                                                      3/8
+  Running scriptlet: iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                                                                                                                                                      3/8
+  Running scriptlet: container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                                                                                 4/8
+  Installing       : container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                                                                                 4/8
+  Running scriptlet: container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                                                                                 4/8
+  Installing       : cri-o-1.34.15-150500.2.1.x86_64                                                                                                                                                                               5/8
+  Running scriptlet: cri-o-1.34.15-150500.2.1.x86_64                                                                                                                                                                               5/8
+  Installing       : kubelet-1.34.8-150500.1.1.x86_64                                                                                                                                                                              6/8
+  Running scriptlet: kubelet-1.34.8-150500.1.1.x86_64                                                                                                                                                                              6/8
+  Installing       : kubectl-1.34.8-150500.1.1.x86_64                                                                                                                                                                              7/8
+  Installing       : kubeadm-1.34.8-150500.1.1.x86_64                                                                                                                                                                              8/8
+  Running scriptlet: container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                                                                                 8/8
+  Running scriptlet: kubeadm-1.34.8-150500.1.1.x86_64                                                                                                                                                                              8/8
+  Verifying        : container-selinux-4:2.245.0-1.amzn2023.noarch                                                                                                                                                                 1/8
+  Verifying        : iptables-nft-1.8.8-3.amzn2023.0.2.x86_64                                                                                                                                                                      2/8
+  Verifying        : libnftnl-1.2.2-2.amzn2023.0.2.x86_64                                                                                                                                                                          3/8
+  Verifying        : cri-o-1.34.15-150500.2.1.x86_64                                                                                                                                                                               4/8
+  Verifying        : kubeadm-1.34.8-150500.1.1.x86_64                                                                                                                                                                              5/8
+  Verifying        : kubectl-1.34.8-150500.1.1.x86_64                                                                                                                                                                              6/8
+  Verifying        : kubelet-1.34.8-150500.1.1.x86_64                                                                                                                                                                              7/8
+  Verifying        : kubernetes-cni-1.7.1-150500.1.1.x86_64                                                                                                                                                                        8/8
+
+Installed:
+  container-selinux-4:2.245.0-1.amzn2023.noarch  cri-o-1.34.15-150500.2.1.x86_64       iptables-nft-1.8.8-3.amzn2023.0.2.x86_64  kubeadm-1.34.8-150500.1.1.x86_64  kubectl-1.34.8-150500.1.1.x86_64  kubelet-1.34.8-150500.1.1.x86_64
+  kubernetes-cni-1.7.1-150500.1.1.x86_64         libnftnl-1.2.2-2.amzn2023.0.2.x86_64
+
+Complete!
+
+
+[root@ip-20-30-30-54 ec2-user]# systemctl enable --now crio
+Created symlink /etc/systemd/system/cri-o.service → /usr/lib/systemd/system/crio.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/crio.service → /usr/lib/systemd/system/crio.service.
+
+
+[root@ip-20-30-30-54 ec2-user]# systemctl enable --now kubelet
+Created symlink /etc/systemd/system/multi-user.target.wants/kubelet.service → /usr/lib/systemd/system/kubelet.service.
+
+
+[root@ip-20-30-30-54 ec2-user]# kubeadm join 20.30.20.13:6443 --token z8h83v.vnl9mrus15p395uy \
+        --discovery-token-ca-cert-hash sha256:b3ad8fefa1077d8eb6bf78493e326f16d7c7b66065d6fee6fdaba23d740281bd
+[preflight] Running pre-flight checks
+        [WARNING Hostname]: hostname "ip-20-30-30-54.ec2.internal" could not be reached
+        [WARNING Hostname]: hostname "ip-20-30-30-54.ec2.internal": lookup ip-20-30-30-54.ec2.internal on 20.30.0.2:53: no such host
+[preflight] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
+[preflight] Use 'kubeadm init phase upload-config kubeadm --config your-config-file' to re-upload it.
+W1029 04:23:29.136923   29631 utils.go:69] The recommended value for "bindAddress" in "KubeProxyConfiguration" is: ::; the provided value is: 0.0.0.0
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/instance-config.yaml"
+[patches] Applied patch of type "application/strategic-merge-patch+json" to target "kubeletconfiguration"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
+[kubelet-check] The kubelet is healthy after 501.413886ms
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
+[root@ip-20-30-30-54 ec2-user]#
