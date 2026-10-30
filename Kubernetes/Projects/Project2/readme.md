@@ -19,33 +19,33 @@ Worker Nodes Security
 EC2 Instances:
 <img width="1838" height="475" alt="image" src="https://github.com/user-attachments/assets/bfef468c-7b15-4252-87df-d38300933f63" />
 
-Load balancer EC2 Instance ( haproxy )
-============================================================================================================================
-load-balancer-instance==>history
-#customizing the shell prompt on your HAProxy EC2 node. It’s a cosmetic change so your terminal shows load-balancer-instance==> instead of the default ubuntu@ip-10-23.48.223
-1  PS1="lOad-balancer-instance==>"
-2  clear
-# It is used on Debian/Ubuntu systems to refresh the local package index
-3  apt update -y
-      
-# Way to install HAProxy on an Ubuntu (Debian‑based) system.
-4  sudo apt install haproxy -y
-5  vi /etc/haproxy/haproxy.cfg
-Add below details in the configuration file 
-------------------------------------------------  
-frontend kubernetes_api
-  bind *:6443
-  mode tcp
-  option tcplog
-  default_backend k8s_masters
+  Load balancer EC2 Instance ( haproxy )
+  ============================================================================================================================
+  load-balancer-instance==>history
+  #customizing the shell prompt on your HAProxy EC2 node. It’s a cosmetic change so your terminal shows load-balancer-instance==> instead of the default ubuntu@ip-10-23.48.223
+  1  PS1="lOad-balancer-instance==>"
+  2  clear
+  # It is used on Debian/Ubuntu systems to refresh the local package index
+  3  apt update -y
+        
+  # Way to install HAProxy on an Ubuntu (Debian‑based) system.
+  4  sudo apt install haproxy -y
+  5  vi /etc/haproxy/haproxy.cfg
+  Add below details in the configuration file 
+  ------------------------------------------------  
+  frontend kubernetes_api
+    bind *:6443
+    mode tcp
+    option tcplog
+    default_backend k8s_masters
 
-backend k8s_masters
-  mode tcp
-  option tcplog
-  balance roundrobin
-  server master1 <master-node-1-private-ip-address>:6443 check
-  server master2 <master-node-2-private-ip-address>:6443 check
-  server master3 <master-node-3-private-ip-address>:6443 check
+  backend k8s_masters
+    mode tcp
+    option tcplog
+    balance roundrobin
+    server master1 <master-node-1-private-ip-address>:6443 check
+    server master2 <master-node-2-private-ip-address>:6443 check
+    server master3 <master-node-3-private-ip-address>:6443 check
   ----------------------------------------------------------------------
 7  cat /etc/haproxy/haproxy.cfg
      <img width="1853" height="792" alt="image" src="https://github.com/user-attachments/assets/0ff2ac90-0151-4c11-8cea-340b419147c0" />   
