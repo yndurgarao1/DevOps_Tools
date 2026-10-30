@@ -1,3 +1,7 @@
+Links:
+  High Availability for multi master node with Stacked control plane : https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
+  <img width="1013" height="652" alt="image" src="https://github.com/user-attachments/assets/3ddc59c1-e60f-487b-a15a-9858e86e8083" />
+
 #load balancer Instance ( haproxy EC2 Instance - security group )
 <img width="1913" height="646" alt="image" src="https://github.com/user-attachments/assets/39aa6f14-1c25-4928-8a49-ef0cac6b8b2d" />
 
@@ -60,3 +64,8 @@ nc -vz <master-node-private-ip-address> 6443
 18  history
 lOad-balancer-instance==>
 =============================================================================================================================
+
+ External etcd topology:
+ <img width="983" height="709" alt="image" src="https://github.com/user-attachments/assets/c5b57334-daac-4b5c-acf1-ec90008c9729" />
+
+ 
