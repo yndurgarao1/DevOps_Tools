@@ -19,7 +19,7 @@ Worker Nodes Security
 EC2 Instances:
 <img width="1838" height="475" alt="image" src="https://github.com/user-attachments/assets/bfef468c-7b15-4252-87df-d38300933f63" />
 
-Load balancer EC2 Instance ( haproxy )
+**Load balancer EC2 Instance ( haproxy )
 ============================================================================================================================
 load-balancer-instance==>history
 #customizing the shell prompt on your HAProxy EC2 node. It’s a cosmetic change so your terminal shows load-balancer-instance==> instead of the default ubuntu@ip-10-23.48.223
@@ -63,7 +63,7 @@ nc -vz <master-node-private-ip-address> 6443
 17  systemctl status haproxy
 18  history
 lOad-balancer-instance==>
-=============================================================================================================================
+=============================================================================================================================**
 
  External etcd topology:
  <img width="983" height="709" alt="image" src="https://github.com/user-attachments/assets/c5b57334-daac-4b5c-acf1-ec90008c9729" />
