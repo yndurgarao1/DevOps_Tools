@@ -11,10 +11,7 @@ Master Nodes Security group
 Worker Nodes Security
 <img width="1915" height="750" alt="image" src="https://github.com/user-attachments/assets/c20014db-fe6b-4e2c-949a-7f654927678b" />
 
-6 EC2 Instances
-  1 - Load balancer ( haproxy setup )
-  3 - Master Nodes 
-  2 - Worker Nodes 
+6 EC2 Instances ==> 1 - Load balancer ( haproxy setup ) 3 - Master Nodes 2 - Worker Nodes 
 
 EC2 Instances:
 <img width="1838" height="475" alt="image" src="https://github.com/user-attachments/assets/bfef468c-7b15-4252-87df-d38300933f63" />
