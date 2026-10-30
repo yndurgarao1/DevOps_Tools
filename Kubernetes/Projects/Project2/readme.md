@@ -1,4 +1,4 @@
-High Availability For Multi Master Node by Stacked Control Plane 
+High Availability K8S Cluster setup For Multi Master Node by Stacked Control Plane 
 ----
 Link: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
   
