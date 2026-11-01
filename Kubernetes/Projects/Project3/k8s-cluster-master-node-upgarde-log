@@ -1,0 +1,497 @@
+K8S Cluster Upgrade in master node 
+
+[root@ip-35-40-35-162 ec2-user]# kubectl version
+Client Version: v1.34.13
+Kustomize Version: v5.7.1
+Server Version: v1.34.13
+
+***********************************************************************
+[root@ip-35-40-35-162 ec2-user]# kubeadm version -o short
+v1.34.13
+
+**********************************************************************
+[root@ip-35-40-35-162 ec2-user]# kubelet --version
+Kubernetes v1.34.13
+
+*********************************************************************
+###Verifying if the Kubernetes package repositories are used
+Link: https://v1-35.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/change-package-repository/
+
+##You should see a file with two URLs that contain your current Kubernetes minor version. For example, if you're using v1.34, you should see this:
+[root@ip-35-40-35-162 ec2-user]# cat /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key
+[root@ip-35-40-35-162 ec2-user]#
+
+##You should see a file with two URLs that contain your current Kubernetes minor version. For example, if you're using v1.34, you should see this:
+
+Change the version in these URLs to the next available minor release, for example:
+
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.35/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.35/rpm/repodata/repomd.xml.key
+
+Save the file and exit your text editor. Continue following the relevant upgrade instructions.
+
+******************************************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# dnf update -y
+Kubernetes                                                                                                                                                                                             231 kB/s |  27 kB     00:00
+Dependencies resolved.
+=======================================================================================================================================================================================================================================
+ Package                                                   Architecture                                      Version                                                       Repository                                             Size
+=======================================================================================================================================================================================================================================
+Upgrading:
+ kubeadm                                                   x86_64                                            1.35.10-150500.1.1                                            kubernetes                                             12 M
+ kubectl                                                   x86_64                                            1.35.10-150500.1.1                                            kubernetes                                             11 M
+ kubelet                                                   x86_64                                            1.35.10-150500.1.1                                            kubernetes                                             13 M
+ kubernetes-cni                                            x86_64                                            1.8.0-150500.1.1                                              kubernetes                                            8.8 M
+
+Transaction Summary
+=======================================================================================================================================================================================================================================
+Upgrade  4 Packages
+
+Total download size: 45 M
+Downloading Packages:
+(1/4): kubeadm-1.35.10-150500.1.1.x86_64.rpm                                                                                                                                                            64 MB/s |  12 MB     00:00
+(2/4): kubectl-1.35.10-150500.1.1.x86_64.rpm                                                                                                                                                            42 MB/s |  11 MB     00:00
+(3/4): kubelet-1.35.10-150500.1.1.x86_64.rpm                                                                                                                                                            38 MB/s |  13 MB     00:00
+(4/4): kubernetes-cni-1.8.0-150500.1.1.x86_64.rpm                                                                                                                                                       38 MB/s | 8.8 MB     00:00
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                                  103 MB/s |  45 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                                               1/1
+  Upgrading        : kubernetes-cni-1.8.0-150500.1.1.x86_64                                                                                                                                                                        1/8
+  Upgrading        : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             2/8
+  Running scriptlet: kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             2/8
+  Upgrading        : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             3/8
+  Upgrading        : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             4/8
+  Running scriptlet: kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Cleanup          : kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Running scriptlet: kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Cleanup          : kubernetes-cni-1.7.1-150500.1.1.x86_64                                                                                                                                                                        6/8
+  Cleanup          : kubectl-1.34.13-150500.1.1.x86_64                                                                                                                                                                             7/8
+  Cleanup          : kubeadm-1.34.13-150500.1.1.x86_64                                                                                                                                                                             8/8
+  Running scriptlet: kubeadm-1.34.13-150500.1.1.x86_64                                                                                                                                                                             8/8
+  Verifying        : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             1/8
+  Verifying        : kubeadm-1.34.13-150500.1.1.x86_64                                                                                                                                                                             2/8
+  Verifying        : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             3/8
+  Verifying        : kubectl-1.34.13-150500.1.1.x86_64                                                                                                                                                                             4/8
+  Verifying        : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Verifying        : kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             6/8
+  Verifying        : kubernetes-cni-1.8.0-150500.1.1.x86_64                                                                                                                                                                        7/8
+  Verifying        : kubernetes-cni-1.7.1-150500.1.1.x86_64                                                                                                                                                                        8/8
+
+Upgraded:
+  kubeadm-1.35.10-150500.1.1.x86_64                       kubectl-1.35.10-150500.1.1.x86_64                       kubelet-1.35.10-150500.1.1.x86_64                       kubernetes-cni-1.8.0-150500.1.1.x86_64
+
+Complete!
+[root@ip-35-40-35-162 ec2-user]#
+***************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# dnf list kubeadm --showduplicates --disableexcludes=kubernetes
+Last metadata expiration check: 0:05:24 ago on Sun Nov  1 05:16:12 2026.
+Installed Packages
+kubeadm.x86_64                                                                                              1.35.10-150500.1.1                                                                                              @kubernetes
+Available Packages
+kubeadm.aarch64                                                                                             1.35.0-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.0-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.0-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.0-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.0-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.1-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.1-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.1-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.1-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.1-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.2-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.2-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.2-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.2-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.2-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.3-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.3-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.3-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.3-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.3-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.4-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.4-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.4-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.4-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.4-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.5-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.5-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.5-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.5-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.5-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.6-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.6-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.6-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.6-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.6-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.7-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.7-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.7-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.7-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.7-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.8-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.8-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.8-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.8-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.8-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.9-150500.1.1                                                                                               kubernetes
+kubeadm.ppc64le                                                                                             1.35.9-150500.1.1                                                                                               kubernetes
+kubeadm.s390x                                                                                               1.35.9-150500.1.1                                                                                               kubernetes
+kubeadm.src                                                                                                 1.35.9-150500.1.1                                                                                               kubernetes
+kubeadm.x86_64                                                                                              1.35.9-150500.1.1                                                                                               kubernetes
+kubeadm.aarch64                                                                                             1.35.10-150500.1.1                                                                                              kubernetes
+kubeadm.ppc64le                                                                                             1.35.10-150500.1.1                                                                                              kubernetes
+kubeadm.s390x                                                                                               1.35.10-150500.1.1                                                                                              kubernetes
+kubeadm.src                                                                                                 1.35.10-150500.1.1                                                                                              kubernetes
+kubeadm.x86_64                                                                                              1.35.10-150500.1.1                                                                                              kubernetes
+[root@ip-35-40-35-162 ec2-user]#
+
+**********************************************************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# dnf list kubelet --showduplicates --disableexcludes=kubernetes
+Last metadata expiration check: 0:06:22 ago on Sun Nov  1 05:16:12 2026.
+Installed Packages
+kubelet.x86_64                                                                                              1.35.10-150500.1.1                                                                                              @kubernetes
+Available Packages
+kubelet.aarch64                                                                                             1.35.0-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.0-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.0-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.0-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.0-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.1-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.1-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.1-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.1-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.1-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.2-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.2-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.2-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.2-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.2-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.3-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.3-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.3-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.3-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.3-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.4-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.4-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.4-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.4-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.4-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.5-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.5-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.5-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.5-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.5-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.6-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.6-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.6-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.6-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.6-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.7-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.7-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.7-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.7-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.7-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.8-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.8-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.8-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.8-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.8-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.9-150500.1.1                                                                                               kubernetes
+kubelet.ppc64le                                                                                             1.35.9-150500.1.1                                                                                               kubernetes
+kubelet.s390x                                                                                               1.35.9-150500.1.1                                                                                               kubernetes
+kubelet.src                                                                                                 1.35.9-150500.1.1                                                                                               kubernetes
+kubelet.x86_64                                                                                              1.35.9-150500.1.1                                                                                               kubernetes
+kubelet.aarch64                                                                                             1.35.10-150500.1.1                                                                                              kubernetes
+kubelet.ppc64le                                                                                             1.35.10-150500.1.1                                                                                              kubernetes
+kubelet.s390x                                                                                               1.35.10-150500.1.1                                                                                              kubernetes
+kubelet.src                                                                                                 1.35.10-150500.1.1                                                                                              kubernetes
+kubelet.x86_64                                                                                              1.35.10-150500.1.1                                                                                              kubernetes
+[root@ip-35-40-35-162 ec2-user]#
+
+******************************************************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# dnf list kubectl --showduplicates --disableexcludes=kubernetes
+Last metadata expiration check: 0:08:19 ago on Sun Nov  1 05:16:12 2026.
+Installed Packages
+kubectl.x86_64                                                                                              1.35.10-150500.1.1                                                                                              @kubernetes
+Available Packages
+kubectl.aarch64                                                                                             1.35.0-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.0-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.0-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.0-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.0-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.1-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.1-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.1-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.1-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.1-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.2-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.2-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.2-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.2-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.2-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.3-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.3-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.3-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.3-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.3-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.4-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.4-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.4-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.4-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.4-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.5-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.5-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.5-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.5-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.5-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.6-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.6-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.6-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.6-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.6-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.7-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.7-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.7-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.7-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.7-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.8-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.8-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.8-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.8-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.8-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.9-150500.1.1                                                                                               kubernetes
+kubectl.ppc64le                                                                                             1.35.9-150500.1.1                                                                                               kubernetes
+kubectl.s390x                                                                                               1.35.9-150500.1.1                                                                                               kubernetes
+kubectl.src                                                                                                 1.35.9-150500.1.1                                                                                               kubernetes
+kubectl.x86_64                                                                                              1.35.9-150500.1.1                                                                                               kubernetes
+kubectl.aarch64                                                                                             1.35.10-150500.1.1                                                                                              kubernetes
+kubectl.ppc64le                                                                                             1.35.10-150500.1.1                                                                                              kubernetes
+kubectl.s390x                                                                                               1.35.10-150500.1.1                                                                                              kubernetes
+kubectl.src                                                                                                 1.35.10-150500.1.1                                                                                              kubernetes
+kubectl.x86_64                                                                                              1.35.10-150500.1.1                                                                                              kubernetes
+[root@ip-35-40-35-162 ec2-user]#
+
+***************************************************************************************************************************************
+[root@ip-35-40-35-162 ec2-user]# dnf install -y kubelet-1.35.1-150500.1.1 kubectl-1.35.1-150500.1.1 kubeadm-1.35.1-150500.1.1 --disableexcludes=kubernetes
+Last metadata expiration check: 0:10:18 ago on Sun Nov  1 05:16:12 2026.
+Dependencies resolved.
+=======================================================================================================================================================================================================================================
+ Package                                               Architecture                                       Version                                                         Repository                                              Size
+=======================================================================================================================================================================================================================================
+Installing dependencies:
+ cri-tools                                             x86_64                                             1.35.0-150500.1.1                                               kubernetes                                             7.5 M
+Downgrading:
+ kubeadm                                               x86_64                                             1.35.1-150500.1.1                                               kubernetes                                              12 M
+ kubectl                                               x86_64                                             1.35.1-150500.1.1                                               kubernetes                                              11 M
+ kubelet                                               x86_64                                             1.35.1-150500.1.1                                               kubernetes                                              12 M
+
+Transaction Summary
+=======================================================================================================================================================================================================================================
+Install    1 Package
+Downgrade  3 Packages
+
+Total download size: 43 M
+Downloading Packages:
+(1/4): kubectl-1.35.1-150500.1.1.x86_64.rpm                                                                                                                                                             21 MB/s |  11 MB     00:00
+(2/4): kubelet-1.35.1-150500.1.1.x86_64.rpm                                                                                                                                                             21 MB/s |  12 MB     00:00
+(3/4): kubeadm-1.35.1-150500.1.1.x86_64.rpm                                                                                                                                                             18 MB/s |  12 MB     00:00
+(4/4): cri-tools-1.35.0-150500.1.1.x86_64.rpm                                                                                                                                                           37 MB/s | 7.5 MB     00:00
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                                   56 MB/s |  43 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                                               1/1
+  Installing       : cri-tools-1.35.0-150500.1.1.x86_64                                                                                                                                                                            1/7
+  Downgrading      : kubeadm-1.35.1-150500.1.1.x86_64                                                                                                                                                                              2/7
+  Downgrading      : kubelet-1.35.1-150500.1.1.x86_64                                                                                                                                                                              3/7
+  Running scriptlet: kubelet-1.35.1-150500.1.1.x86_64                                                                                                                                                                              3/7
+  Downgrading      : kubectl-1.35.1-150500.1.1.x86_64                                                                                                                                                                              4/7
+  Running scriptlet: kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/7
+  Cleanup          : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/7
+  Running scriptlet: kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/7
+  Cleanup          : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             6/7
+  Cleanup          : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             7/7
+  Running scriptlet: kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             7/7
+  Verifying        : kubeadm-1.35.1-150500.1.1.x86_64                                                                                                                                                                              1/7
+  Verifying        : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             2/7
+  Verifying        : kubectl-1.35.1-150500.1.1.x86_64                                                                                                                                                                              3/7
+  Verifying        : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             4/7
+  Verifying        : kubelet-1.35.1-150500.1.1.x86_64                                                                                                                                                                              5/7
+  Verifying        : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             6/7
+  Verifying        : cri-tools-1.35.0-150500.1.1.x86_64                                                                                                                                                                            7/7
+
+Downgraded:
+  kubeadm-1.35.1-150500.1.1.x86_64                                            kubectl-1.35.1-150500.1.1.x86_64                                            kubelet-1.35.1-150500.1.1.x86_64
+Installed:
+  cri-tools-1.35.0-150500.1.1.x86_64
+
+Complete!
+[root@ip-35-40-35-162 ec2-user]#
+*************************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# kubeadm version
+kubeadm version: &version.Info{Major:"1", Minor:"35", EmulationMajor:"", EmulationMinor:"", MinCompatibilityMajor:"", MinCompatibilityMinor:"", GitVersion:"v1.35.1", GitCommit:"8fea90b45245ef5c8ba54e7ae044d3e777c22500", GitTreeState:"clean", BuildDate:"2026-02-10T12:55:17Z", GoVersion:"go1.25.6", Compiler:"gc", Platform:"linux/amd64"}
+[root@ip-35-40-35-162 ec2-user]# kubeadm version -o short
+v1.35.1
+[root@ip-35-40-35-162 ec2-user]# 
+
+[root@ip-35-40-35-162 ec2-user]# kubelet --version
+Kubernetes v1.35.1
+
+
+[root@ip-35-40-35-162 ec2-user]# kubectl version
+Client Version: v1.35.1
+Kustomize Version: v5.7.1
+Server Version: v1.34.13
+[root@ip-35-40-35-162 ec2-user]#
+*****************************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# kubeadm upgrade plan
+[preflight] Running pre-flight checks.
+[upgrade/config] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
+[upgrade/config] Use 'kubeadm init phase upload-config kubeadm --config your-config-file' to re-upload it.
+[upgrade] Running cluster health checks
+[upgrade] Fetching available versions to upgrade to
+[upgrade/versions] Cluster version: 1.34.13
+[upgrade/versions] kubeadm version: v1.35.1
+I1101 05:30:00.831267   55139 version.go:260] remote version is much newer: v1.37.2; falling back to: stable-1.35
+[upgrade/versions] Target version: v1.35.10
+[upgrade/versions] Latest version in the v1.34 series: v1.34.13
+
+Components that must be upgraded manually after you have upgraded the control plane with 'kubeadm upgrade apply':
+COMPONENT   NODE                           CURRENT    TARGET
+kubelet     ip-35-40-35-122.ec2.internal   v1.34.13   v1.35.10
+kubelet     ip-35-40-35-162.ec2.internal   v1.34.13   v1.35.10
+kubelet     ip-35-40-35-36.ec2.internal    v1.34.13   v1.35.10
+
+Upgrade to the latest stable version:
+
+COMPONENT                 NODE                           CURRENT    TARGET
+kube-apiserver            ip-35-40-35-162.ec2.internal   v1.34.13   v1.35.10
+kube-controller-manager   ip-35-40-35-162.ec2.internal   v1.34.13   v1.35.10
+kube-scheduler            ip-35-40-35-162.ec2.internal   v1.34.13   v1.35.10
+kube-proxy                                               1.34.13    v1.35.10
+CoreDNS                                                  v1.12.1    v1.13.1
+etcd                      ip-35-40-35-162.ec2.internal   3.6.5-0    3.6.6-0
+
+You can now apply the upgrade by executing the following command:
+
+        kubeadm upgrade apply v1.35.10
+
+Note: Before you can perform this upgrade, you have to update kubeadm to v1.35.10.
+
+_____________________________________________________________________
+
+
+The table below shows the current state of component configs as understood by this version of kubeadm.
+Configs that have a "yes" mark in the "MANUAL UPGRADE REQUIRED" column require manual config upgrade or
+resetting to kubeadm defaults before a successful upgrade can be performed. The version to manually
+upgrade to is denoted in the "PREFERRED VERSION" column.
+
+API GROUP                 CURRENT VERSION   PREFERRED VERSION   MANUAL UPGRADE REQUIRED
+kubeproxy.config.k8s.io   v1alpha1          v1alpha1            no
+kubelet.config.k8s.io     v1beta1           v1beta1             no
+_____________________________________________________________________
+
+[root@ip-35-40-35-162 ec2-user]# 
+
+****************************************************************************************************
+[root@ip-35-40-35-162 ec2-user]# sudo kubeadm upgrade apply v1.35.1
+[upgrade] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
+[upgrade] Use 'kubeadm init phase upload-config kubeadm --config your-config-file' to re-upload it.
+[upgrade/preflight] Running preflight checks
+[upgrade] Running cluster health checks
+[upgrade/preflight] You have chosen to upgrade the cluster version to "v1.35.1"
+[upgrade/versions] Cluster version: v1.34.13
+[upgrade/versions] kubeadm version: v1.35.1
+[upgrade] Are you sure you want to proceed? [y/N]: y
+[upgrade/preflight] Pulling images required for setting up a Kubernetes cluster
+[upgrade/preflight] This might take a minute or two, depending on the speed of your internet connection
+[upgrade/preflight] You can also perform this action beforehand using 'kubeadm config images pull'
+[upgrade/control-plane] Upgrading your static Pod-hosted control plane to version "v1.35.1" (timeout: 5m0s)...
+[upgrade/staticpods] Writing new Static Pod manifests to "/etc/kubernetes/tmp/kubeadm-upgraded-manifests1459035771"
+[upgrade/staticpods] Preparing for "etcd" upgrade
+[upgrade/staticpods] Renewing etcd-server certificate
+[upgrade/staticpods] Renewing etcd-peer certificate
+[upgrade/staticpods] Renewing etcd-healthcheck-client certificate
+[upgrade/staticpods] Moving new manifest to "/etc/kubernetes/manifests/etcd.yaml" and backing up old manifest to "/etc/kubernetes/tmp/kubeadm-backup-manifests-2026-11-01-05-35-50/etcd.yaml"
+[upgrade/staticpods] Waiting for the kubelet to restart the component
+[upgrade/staticpods] This can take up to 5m0s
+[apiclient] Found 1 Pods for label selector component=etcd
+[upgrade/staticpods] Component "etcd" upgraded successfully!
+[upgrade/etcd] Waiting for etcd to become available
+[upgrade/staticpods] Preparing for "kube-apiserver" upgrade
+[upgrade/staticpods] Renewing apiserver certificate
+[upgrade/staticpods] Renewing apiserver-kubelet-client certificate
+[upgrade/staticpods] Renewing front-proxy-client certificate
+[upgrade/staticpods] Renewing apiserver-etcd-client certificate
+[upgrade/staticpods] Moving new manifest to "/etc/kubernetes/manifests/kube-apiserver.yaml" and backing up old manifest to "/etc/kubernetes/tmp/kubeadm-backup-manifests-2026-11-01-05-35-50/kube-apiserver.yaml"
+[upgrade/staticpods] Waiting for the kubelet to restart the component
+[upgrade/staticpods] This can take up to 5m0s
+[apiclient] Found 1 Pods for label selector component=kube-apiserver
+[upgrade/staticpods] Component "kube-apiserver" upgraded successfully!
+[upgrade/staticpods] Preparing for "kube-controller-manager" upgrade
+[upgrade/staticpods] Renewing controller-manager.conf certificate
+[upgrade/staticpods] Moving new manifest to "/etc/kubernetes/manifests/kube-controller-manager.yaml" and backing up old manifest to "/etc/kubernetes/tmp/kubeadm-backup-manifests-2026-11-01-05-35-50/kube-controller-manager.yaml"
+[upgrade/staticpods] Waiting for the kubelet to restart the component
+[upgrade/staticpods] This can take up to 5m0s
+[apiclient] Found 1 Pods for label selector component=kube-controller-manager
+[upgrade/staticpods] Component "kube-controller-manager" upgraded successfully!
+[upgrade/staticpods] Preparing for "kube-scheduler" upgrade
+[upgrade/staticpods] Renewing scheduler.conf certificate
+[upgrade/staticpods] Moving new manifest to "/etc/kubernetes/manifests/kube-scheduler.yaml" and backing up old manifest to "/etc/kubernetes/tmp/kubeadm-backup-manifests-2026-11-01-05-35-50/kube-scheduler.yaml"
+[upgrade/staticpods] Waiting for the kubelet to restart the component
+[upgrade/staticpods] This can take up to 5m0s
+[apiclient] Found 1 Pods for label selector component=kube-scheduler
+[upgrade/staticpods] Component "kube-scheduler" upgraded successfully!
+[upgrade/control-plane] The control plane instance for this node was successfully upgraded!
+[upload-config] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[kubelet] Creating a ConfigMap "kubelet-config" in namespace kube-system with the configuration for the kubelets in the cluster
+[upgrade/kubeconfig] The kubeconfig files for this node were successfully upgraded!
+W1101 05:38:18.581100   57041 postupgrade.go:105] Using temporary directory /etc/kubernetes/tmp/kubeadm-kubelet-config-2026-11-01-05-38-18 for kubelet config. To override it set the environment variable KUBEADM_UPGRADE_DRYRUN_DIR
+[upgrade] Backing up kubelet config file to /etc/kubernetes/tmp/kubeadm-kubelet-config-2026-11-01-05-38-18/config.yaml
+[patches] Applied patch of type "application/strategic-merge-patch+json" to target "kubeletconfiguration"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[upgrade/kubelet-config] The kubelet configuration for this node was successfully upgraded!
+[upgrade/bootstrap-token] Configuring bootstrap token and cluster-info RBAC rules
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+W1101 05:38:22.924430   57041 postupgrade.go:203] Using temporary directory /etc/kubernetes/tmp/kubeadm-kubelet-env4015836962 for kubelet env file. To override it set the environment variable KUBEADM_UPGRADE_DRYRUN_DIR
+[upgrade] Backing up kubelet env file to /etc/kubernetes/tmp/kubeadm-kubelet-env4015836962/kubeadm-flags.env
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+
+[upgrade] SUCCESS! A control plane node of your cluster was upgraded to "v1.35.1".
+
+[upgrade] Now please proceed with upgrading the rest of the nodes by following the right order.
+[root@ip-35-40-35-162 ec2-user]#
+
+***************************************************************************************************************
+
+[root@ip-35-40-35-162 ec2-user]# systemctl restart kubelet
+
