@@ -492,6 +492,6 @@ W1101 05:38:22.924430   57041 postupgrade.go:203] Using temporary directory /etc
 [root@ip-35-40-35-162 ec2-user]#
 
 ***************************************************************************************************************
-
+[root@ip-35-40-35-162 ec2-user]#sudo systemctl daemon-reload
 [root@ip-35-40-35-162 ec2-user]# systemctl restart kubelet
 
