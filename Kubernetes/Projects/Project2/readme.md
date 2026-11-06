@@ -1,4 +1,4 @@
-High Availability For Multi Master Node by Stacked Control Plane 
+High Availability K8S Cluster setup For Multi Master Node by Stacked Control Plane 
 ----
 Link: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
   
@@ -60,6 +60,11 @@ Add below details in the configuration file
 
 #nc -vz <master-node-private-ip-address> 6443  ==> to check connectivity 
 
+EC2 Instance master nodes cluster setup in three ec2 instance
+---
+Install pre-requisite for cluster setup in three ec2 instance
+
+Initiate kubeadm only in one master node and add master node token in other ec2 master nodes 
 
 
 
