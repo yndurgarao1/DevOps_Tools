@@ -10,7 +10,7 @@ br_netfilter
 EOF
 
 #ensures that the kernel supports OverlayFS, which is critical for Docker and Kubernetes to handle container image layers efficiently.
-root@ip-4-8-4-11:/home/ubuntu# sudo modprobe overlay ==> 
+root@ip-4-8-4-11:/home/ubuntu# sudo modprobe overlay  
 
 #enables iptables to filter bridged traffic, which is essential for Kubernetes networking and CNI plugins (like Calico, Flannel, etc.) to function correctly.
 root@ip-4-8-4-11:/home/ubuntu# sudo modprobe br_netfilter
