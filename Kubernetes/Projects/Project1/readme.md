@@ -1,5 +1,9 @@
 Kubernetes Cluster Setup on AWS EC2 Instance 
 ---
+**Pre-requisite**:
+
+<img width="568" height="384" alt="image" src="https://github.com/user-attachments/assets/09d20636-697c-496b-a820-57c6eb9b8581" />
+
 **VPC Details** : 
   <img width="1864" height="766" alt="image" src="https://github.com/user-attachments/assets/ead89582-d0e8-4c8c-b333-6a285f8ea2e7" />
     
