@@ -1,4 +1,4 @@
-High Availability K8S Cluster setup For Multi Master Node by Stacked Control Plane 
+High Availability K8S Cluster setup by Stacked Control Plane
 ----
 Link: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
   
@@ -58,13 +58,33 @@ Add below details in the configuration file
 
 #sudo systemctl status haproxy
 
-#nc -vz <master-node-private-ip-address> 6443  ==> to check connectivity 
+#nc -vz master-node-private-ip-address 6443  ==> to check connectivity 
 
-EC2 Instance master nodes cluster setup in three ec2 instance
+check haproxy is connected to master nodes 
+<img width="1822" height="701" alt="image" src="https://github.com/user-attachments/assets/903e42a9-90e5-4fbf-b9c5-5e832851244b" />
+
+
+Master Nodes EC2 Instance:
 ---
-Install pre-requisite for cluster setup in three ec2 instance
+Install pre-requisite for cluster setup in 3 EC2 InstanceS
 
-Initiate kubeadm only in one master node and add master node token in other ec2 master nodes 
+Initiate kubeadm only in one master node and add master node token in other EC2 master nodes for high availability master nodes 
+
+Command:
+#sudo kubeadm init --control-plane-endpoint "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" --upload-certs
+
+kubeadm init --control-plane-end-point load-balancer:6443 --upload-certs
+					 ( or )
+kubeadm init --control-plane-end-point load-balancer-private-ip-address:6443 --upload-certs
+<img width="1670" height="836" alt="image" src="https://github.com/user-attachments/assets/42665835-af42-4fc5-a174-03aa1fe41a45" />
+
+<img width="1499" height="935" alt="image" src="https://github.com/user-attachments/assets/ae46f6ab-246a-48ef-9a97-c91a4182543f" />
+
+<img width="1338" height="94" alt="image" src="https://github.com/user-attachments/assets/933c50f8-74f8-481f-800d-9d7cadd8dafa" />
+
+
+
+
 
 
 
