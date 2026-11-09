@@ -1,0 +1,248 @@
+[root@ip-40-50-40-137 ec2-user]# yum update -y
+Amazon Linux 2023 Kernel Livepatch repository                   798 kB/s |  89 kB     00:00
+Dependencies resolved.
+Nothing to do.
+Complete!
+=====================
+[root@ip-40-50-40-137 ec2-user]# hostnamectl set-hostname etcd-node1  				==> ( do it forother etcd nodes )
+=====================
+[root@ip-40-50-40-137 ec2-user]# sudo su
+=====================
+[root@etcd-node1 ec2-user]# cat /etc/os-release
+NAME="Amazon Linux"
+VERSION="2023"
+ID="amzn"
+ID_LIKE="fedora"
+VERSION_ID="2023"
+PLATFORM_ID="platform:al2023"
+PRETTY_NAME="Amazon Linux 2023.12.20261102"
+ANSI_COLOR="0;33"
+CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2023"
+HOME_URL="https://aws.amazon.com/linux/amazon-linux-2023/"
+DOCUMENTATION_URL="https://docs.aws.amazon.com/linux/"
+SUPPORT_URL="https://aws.amazon.com/premiumsupport/"
+BUG_REPORT_URL="https://github.com/amazonlinux/amazon-linux-2023"
+VENDOR_NAME="AWS"
+VENDOR_URL="https://aws.amazon.com/"
+SUPPORT_END="2029-06-30"
+[root@etcd-node1 ec2-user]# hostname
+etcd-node1
+======================
+[root@etcd-node1 ec2-user]# mkdir -p /var/lib/etcd 									==> ( do it forother etcd nodes )
+=========================
+[root@etcd-node1 ec2-user]# groupadd etcd											==> ( do it forother etcd nodes )
+=========================
+[root@etcd-node1 ec2-user]# useradd -d /var/lib/etcd -s /bin/false -g etcd etcd		==> ( do it forother etcd nodes )
+========================
+[root@etcd-node1 ec2-user]# chown -R etcd:etcd /var/lib/etcd						==> ( do it forother etcd nodes )
+=======================
+##Generating TLS Certificate in one of the ETCD EC2 Instance
+For Generating TLS Certificate we are using cfssl from cloudware 
+URL: https://github.com/cloudflare/cfssl/releases
+we need cfssl and cfssljson 
+
+https://github.com/cloudflare/cfssl/releases/download/v1.7.1/cfssl_1.7.1_linux_amd64
+https://github.com/cloudflare/cfssl/releases/download/v1.7.1/cfssljson_1.7.1_linux_amd64
+
+
+[root@etcd-node1 ec2-user]# curl -s -L -o /usr/bin/cfssl https://github.com/cloudflare/cfssl/releases/download/v1.7.1/cfssl_1.7.1_linux_amd64
+[root@etcd-node1 ec2-user]# chmod +x /usr/bin/cfssl
+[root@etcd-node1 ec2-user]# curl -s -L -o /usr/bin/cfssljson https://github.com/cloudflare/cfssl/releases/download/v1.7.1/cfssljson_1.7.1_linux_amd64
+[root@etcd-node1 ec2-user]# chmod +x /usr/bin/cfssljson
+==================================
+[root@etcd-node1 ec2-user]# vi ca-config.json
+{
+  "signing": {
+    "default": {
+      "expiry": "8760h"
+    },
+    "profiles": {
+      "etcd": {
+        "usages": [
+            "signing",
+            "key encipherment",
+            "server auth",
+            "client auth"
+        ],
+        "expiry": "8760h"
+      }
+    }
+  }
+}
+==================================
+[root@etcd-node1 ec2-user]# vi ca-certs.json
+{
+  "CN": "etcd-ca",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "IN",
+      "ST": "Telangana",
+      "L": "Hyderabad",
+      "O": "Kubernetes",
+      "OU": "CA"
+    }
+  ]
+}
+================================= 
+[root@etcd-node1 ec2-user]# cfssl gencert --help
+[root@etcd-node1 ec2-user]# cfssl gencert -initca ca-certs.json 
+[root@etcd-node1 ec2-user]# cfssl gencert -initca ca-certs.json | cfssl -bare ca
+[root@etcd-node1 certs]# cfssl gencert -initca ca-certs.json | cfssljson -bare ca
+2026/11/09 04:00:07 [INFO] generating a new CA key and certificate from CSR
+2026/11/09 04:00:07 [INFO] generate received request
+2026/11/09 04:00:07 [INFO] received CSR
+2026/11/09 04:00:07 [INFO] generating key: rsa-2048
+2026/11/09 04:00:08 [INFO] encoded CSR
+2026/11/09 04:00:08 [INFO] signed certificate with serial number 550101533755796716712724598365890768316643657964
+[root@etcd-node1 certs]# ls
+ca-certs.json  ca-config.json  ca-key.pem  ca.csr  ca.pem  etcd-csr.json
+
+==============================
+[root@etcd-node1 ec2-user]# vi etcd-ca.json
+{
+  "CN": "etcd",
+  "hosts": [
+    "127.0.0.1",
+    "etcd-node1",
+    "etcd-node2",
+    "etcd-node3",
+    "localhost"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 4096
+  }
+}
+=====================================
+[root@etcd-node1 certs]# cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config ca-config.json -profile=etcd etcd-csr.json | cfssljson -bare etcd
+2026/11/09 04:04:25 [INFO] generate received request
+2026/11/09 04:04:25 [INFO] received CSR
+2026/11/09 04:04:25 [INFO] generating key: rsa-4096
+2026/11/09 04:04:25 [INFO] encoded CSR
+2026/11/09 04:04:25 [INFO] signed certificate with serial number 69520829445106012116735325028726431861542164924
+[root@etcd-node1 certs]# ls
+ca-certs.json  ca-config.json  ca-key.pem  ca.csr  ca.pem  etcd-csr.json  etcd-key.pem  etcd.csr  etcd.pem
+==================================
+Copy the ca.pem, ca-key.pem, etcd.pem etcd-key.pem file to other etcd nodes 
+[root@etcd-node1 certs]# scp -i server_copy *.pem ec2-user@40.50.40.251:/tmp
+The authenticity of host '40.50.40.251 (40.50.40.251)' can't be established.
+ED25519 key fingerprint is SHA256:jZTGSZt++vSA2rkVPN03A+GDGG0FuednefkPxdfzUSA.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '40.50.40.251' (ED25519) to the list of known hosts.
+ca-key.pem              100% 1675     4.0MB/s   00:00
+ca.pem                  100% 1322     3.2MB/s   00:00
+etcd-key.pem			100% 3243     5.4MB/s   00:00
+etcd.pem				100% 1716     4.5MB/s   00:00
+[root@etcd-node1 certs]# 
+=============================================
+[root@etcd-node1 certs]# mv *.pem /etc/ssl/									==> ( do it forother etcd nodes )
+============================================
+###Installation of ETCDCTL
+URL: https://etcd.io/docs/v3.7/install/
+URL: https://github.com/etcd-io/etcd/releases/	
+
+
+[root@etcd-node1 ec2-user]# ETCD_VER=v3.7.3
+[root@etcd-node1 ec2-user]# GOOGLE_URL=https://storage.googleapis.com/etcd
+[root@etcd-node1 ec2-user]# GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
+[root@etcd-node1 ec2-user]# OWNLOAD_URL=${GOOGLE_URL}
+[root@etcd-node1 ec2-user]# curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz 
+[root@etcd-node1 ec2-user]# tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+[root@etcd-node1 ec2-user]# cd etcd-v3.7.3-linux-amd64
+[root@etcd-node1 ec2-user]# mv etcd etcdctl etcdutl /usr/bin 
+[root@etcd-node1 ec2-user]# etcd --version
+[root@etcd-node1 ec2-user]# etcdctl version
+[root@etcd-node1 ec2-user]# etcdutl version
+
+===================================================
+##etcd as a service ( Perform in all etcd nodes )
+
+[root@etcd-node1 ec2-user]# cd /etc/systemd/system
+[root@etcd-node1 ec2-user]# vi /etcd.service
+[Unit]
+Description=etcd server
+
+[Service]
+Type=notify
+User=etcd
+EnvironmentFile=/etc/etcd_config
+ExecStart=/usr/bin/etcd
+Restart=on-failure
+RestartSec=5
+
+
+[Install]
+WantedBy=multi-user.target
+====================================================
+For etcd-node1 Environment File:
+[root@etcd-node1 ec2-user]# vi /etc/etcd_config
+ETCD_NAME=etcd1
+ETCD_DATA_DIR=/var/lib/etcd
+ETCD_LISTEN_CLIENTS_URLS=https://127.0.0.1:2379,https://30.40.30.100:2379
+ETCD_ADVERTISE_CLIENT_URLS=https://30.40.30.100:2379
+ETCD_LISTEN_PEER_URL=https://30.40.30.100:2380
+ETCD_INITIAL_ADVERTISE_PEER_URLS=https://30.40.30.100:2380
+ETCD_INITIAL_CLUSTER=etcd1=https://30.40.30.100:2380,etcd2=https://30.40.30.150:2380,etcd3=https://30.40.30.200:2380
+ETCD_INITIAL_CLUSTER_STATE=new
+ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+ETCD_CLIENT_CERT_AUTH=true
+ETCD_CERT_FILE=/etc/ssl/etcd.pem
+ETCD_KEY_FILE=/etc/ssl/etcd-key.pem
+ETCD_TRUSTERD_CA_FILE=/etc/ssl/ca.pem
+ETCD_PEER_CLIENT_CERT_AUTH=true
+ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/ca.pem
+ETCD_PEER_CERT_FILE=/etc/ssl/etcd.pem
+ETCD_PEER_KEY_FILE=/etc/ssl/etcd-key.pem
+-----------------------------------------------
+For etcd-node2 Environment File:
+[root@etcd-node2 ec2-user]# vi /etc/etcd_config
+ETCD_NAME=etcd2
+ETCD_DATA_DIR=/var/lib/etcd
+ETCD_LISTEN_CLIENTS_URLS=https://127.0.0.1:2379,https://30.40.30.150:2379
+ETCD_ADVERTISE_CLIENT_URLS=https://30.40.30.100:2379
+ETCD_LISTEN_PEER_URL=https://30.40.30.100:2380
+ETCD_INITIAL_ADVERTISE_PEER_URLS=https://30.40.30.100:2380
+ETCD_INITIAL_CLUSTER=etcd1=https://30.40.30.100:2380,etcd2=https://30.40.30.150:2380,etcd3=https://30.40.30.200:2380
+ETCD_INITIAL_CLUSTER_STATE=new
+ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+ETCD_CLIENT_CERT_AUTH=true
+ETCD_CERT_FILE=/etc/ssl/etcd.pem
+ETCD_KEY_FILE=/etc/ssl/etcd-key.pem
+ETCD_TRUSTERD_CA_FILE=/etc/ssl/ca.pem
+ETCD_PEER_CLIENT_CERT_AUTH=true
+ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/ca.pem
+ETCD_PEER_CERT_FILE=/etc/ssl/etcd.pem
+ETCD_PEER_KEY_FILE=/etc/ssl/etcd-key.pem
+---------------------------------------
+For etcd-node3 Environment File
+
+[root@etcd-node3 ec2-user]# vi /etc/etcd_config
+ETCD_NAME=etcd3
+ETCD_DATA_DIR=/var/lib/etcd
+ETCD_LISTEN_CLIENTS_URLS=https://127.0.0.1:2379,https://30.40.30.200:2379
+ETCD_ADVERTISE_CLIENT_URLS=https://30.40.30.100:2379
+ETCD_LISTEN_PEER_URL=https://30.40.30.100:2380
+ETCD_INITIAL_ADVERTISE_PEER_URLS=https://30.40.30.100:2380
+ETCD_INITIAL_CLUSTER=etcd1=https://30.40.30.100:2380,etcd2=https://30.40.30.150:2380,etcd3=https://30.40.30.200:2380
+ETCD_INITIAL_CLUSTER_STATE=new
+ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+ETCD_CLIENT_CERT_AUTH=true
+ETCD_CERT_FILE=/etc/ssl/etcd.pem
+ETCD_KEY_FILE=/etc/ssl/etcd-key.pem
+ETCD_TRUSTERD_CA_FILE=/etc/ssl/ca.pem
+ETCD_PEER_CLIENT_CERT_AUTH=true
+ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/ca.pem
+ETCD_PEER_CERT_FILE=/etc/ssl/etcd.pem
+ETCD_PEER_KEY_FILE=/etc/ssl/etcd-key.pem
+---------------------------------------------
+##perform action in all etcd nodes 
+[root@etcd-node1 ec2-user]# systemctl daaemon-reload
+[root@etcd-node1 ec2-user]# systemctl start etcd
+[root@etcd-node1 ec2-user]# setfacl -m u:etcd:rx /etc/ssl/etcd-key.pem
+=======
+[root@etcd-node1 ec2-user]#  etcdctl --endpoints=https://30.40.30.100:2379 --cacert=/etc/ssl/ca.pem --cert=/etc/ssl/etcd.pem --key=/etc/ssl/etcd-key.pem member list
