@@ -1088,6 +1088,22 @@ https://127.0.0.1:2379 is healthy: successfully committed proposal: took = 11.80
 ****Note: leader=true , false=follower 
 ====
 
+[root@etcd1 ec2-user]# ETCDCTL_API=3 etcdctl --endpoints=https://20.30.20.171:2379 --cacert=/etc/etcd/pki/ca.pem --cert=/etc/etcd/pki/client.pem --key=/etc/etcd/pki/client-key.pem snapshot save etcd3-backup1.db
+{"level":"warn","ts":"2026-11-16T16:32:45.393568Z","caller":"flags/flag.go:94","msg":"unrecognized environment variable","environment-variable":"ETCDCTL_API=3"}
+{"level":"info","ts":"2026-11-16T16:32:45.394365Z","caller":"snapshot/v3_snapshot.go:83","msg":"created temporary db file","path":"etcd3-backup1.db.part"}
+{"level":"info","ts":"2026-11-16T16:32:45.403840Z","logger":"client","caller":"v3/maintenance.go:236","msg":"opened snapshot stream; downloading"}
+{"level":"info","ts":"2026-11-16T16:32:45.407346Z","caller":"snapshot/v3_snapshot.go:96","msg":"fetching snapshot","endpoint":"https://20.30.20.171:2379"}
+{"level":"info","ts":"2026-11-16T16:32:45.499036Z","logger":"client","caller":"v3/maintenance.go:302","msg":"completed snapshot read; closing"}
+{"level":"info","ts":"2026-11-16T16:32:45.508040Z","caller":"snapshot/v3_snapshot.go:111","msg":"fetched snapshot","endpoint":"https://20.30.20.171:2379","size":"7.1 MB","took":"113.628954ms","etcd-version":"3.7.0"}
+{"level":"info","ts":"2026-11-16T16:32:45.508306Z","caller":"snapshot/v3_snapshot.go:121","msg":"saved","path":"etcd3-backup1.db"}
+Snapshot saved at etcd3-backup1.db
+Server version 3.7.0
+====
+[root@etcd1 ec2-user]# ls
+cert_gen  etcd-v3.7.3-linux-amd64  etcd-v3.7.3-linux-amd64.tar.gz  etcd1-backup.db  etcd1-backup1.db  etcd1.db.part  etcd3-backup1.db
+[root@etcd1 ec2-user]#
+
+
 
 
 
