@@ -1,3 +1,43 @@
+**EC2 Instances:
+	Master Nodes: 	3
+	Worker Nodes: 	3
+	ETCD Nodes:		3
+	haproxy Nodes:	2
+	Configure haproxy nodes with Network Load Balancer in AWS 
+====
+**Ports:
+	**Master Nodes:
+		Inbound Rules: 
+			Port	Protocol	Purpose
+			6443	TCP			Kubernetes API Server
+			10250	TCP			Kubelet API
+			10257	TCP			kube-controller-manager
+			10259	TCP			kube-scheduler
+			22 		TCP			EC2 Instance login 
+			
+	**Worker Nodes:
+		Inbound Rules:
+			Port		Protocol	Purpose
+			10250		TCP			Kubelet API
+			30000-32767	TCP/UDP		NodePort Services
+			4789		UDP			VXLAN (Calico/Flannel overlay networking)
+			179			TCP			BGP (Calico, if used)
+			22			TCP			SSH Management
+			
+	**ETCD Nodes:
+		Inbound Rules:
+			Port	Protocol	Purpose
+			2379	TCP			ETCD client requests
+			2380	TCP			ETCD peer communication
+			22		TCP			SSH Management
+			
+	**HAProxy Nodes:
+		Inbound Rules:
+			Port	Protocol	Purpose
+			6443	TCP			Forward Kubernetes API traffic
+			22		TCP			SSH Management
+			
+			
 **********	Execute below commands in all ETCD EC2 Instances **********
 
 [ec2-user@ip-20-30-20-171 ~]$ sudo su
