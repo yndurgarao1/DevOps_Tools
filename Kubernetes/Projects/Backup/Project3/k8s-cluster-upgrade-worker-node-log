@@ -1,0 +1,135 @@
+[root@ip-35-40-35-122 ec2-user]# vi /etc/yum.repos.d/kubernetes.repo
+Note: Updte required version for upgrade in package repo 
+[root@ip-35-40-35-122 ec2-user]# dnf update -y
+Kubernetes                                                                                                                                                                                             251 kB/s |  27 kB     00:00
+Dependencies resolved.
+=======================================================================================================================================================================================================================================
+ Package                                                   Architecture                                      Version                                                       Repository                                             Size
+=======================================================================================================================================================================================================================================
+Upgrading:
+ kubeadm                                                   x86_64                                            1.35.10-150500.1.1                                            kubernetes                                             12 M
+ kubectl                                                   x86_64                                            1.35.10-150500.1.1                                            kubernetes                                             11 M
+ kubelet                                                   x86_64                                            1.35.10-150500.1.1                                            kubernetes                                             13 M
+ kubernetes-cni                                            x86_64                                            1.8.0-150500.1.1                                              kubernetes                                            8.8 M
+
+Transaction Summary
+=======================================================================================================================================================================================================================================
+Upgrade  4 Packages
+
+Total download size: 45 M
+Downloading Packages:
+(1/4): kubectl-1.35.10-150500.1.1.x86_64.rpm                                                                                                                                                            50 MB/s |  11 MB     00:00
+(2/4): kubeadm-1.35.10-150500.1.1.x86_64.rpm                                                                                                                                                            42 MB/s |  12 MB     00:00
+(3/4): kubelet-1.35.10-150500.1.1.x86_64.rpm                                                                                                                                                            36 MB/s |  13 MB     00:00
+(4/4): kubernetes-cni-1.8.0-150500.1.1.x86_64.rpm                                                                                                                                                       44 MB/s | 8.8 MB     00:00
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                                  101 MB/s |  45 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                                               1/1
+  Upgrading        : kubernetes-cni-1.8.0-150500.1.1.x86_64                                                                                                                                                                        1/8
+  Upgrading        : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             2/8
+  Running scriptlet: kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             2/8
+  Upgrading        : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             3/8
+  Upgrading        : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             4/8
+  Running scriptlet: kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Cleanup          : kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Running scriptlet: kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Cleanup          : kubernetes-cni-1.7.1-150500.1.1.x86_64                                                                                                                                                                        6/8
+  Cleanup          : kubectl-1.34.13-150500.1.1.x86_64                                                                                                                                                                             7/8
+  Cleanup          : kubeadm-1.34.13-150500.1.1.x86_64                                                                                                                                                                             8/8
+  Running scriptlet: kubeadm-1.34.13-150500.1.1.x86_64                                                                                                                                                                             8/8
+  Verifying        : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             1/8
+  Verifying        : kubeadm-1.34.13-150500.1.1.x86_64                                                                                                                                                                             2/8
+  Verifying        : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             3/8
+  Verifying        : kubectl-1.34.13-150500.1.1.x86_64                                                                                                                                                                             4/8
+  Verifying        : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/8
+  Verifying        : kubelet-1.34.13-150500.1.1.x86_64                                                                                                                                                                             6/8
+  Verifying        : kubernetes-cni-1.8.0-150500.1.1.x86_64                                                                                                                                                                        7/8
+  Verifying        : kubernetes-cni-1.7.1-150500.1.1.x86_64                                                                                                                                                                        8/8
+
+Upgraded:
+  kubeadm-1.35.10-150500.1.1.x86_64                       kubectl-1.35.10-150500.1.1.x86_64                       kubelet-1.35.10-150500.1.1.x86_64                       kubernetes-cni-1.8.0-150500.1.1.x86_64
+
+Complete!
+[root@ip-35-40-35-122 ec2-user]# dnf install -y kubelet-1.35.1-150500.1.1 kubectl-1.35.1-150500.1.1 kubeadm-1.35.1-150500.1.1 --disableexcludes=kubernetes
+Last metadata expiration check: 0:00:39 ago on Sun Nov  1 05:56:17 2026.
+Dependencies resolved.
+=======================================================================================================================================================================================================================================
+ Package                                               Architecture                                       Version                                                         Repository                                              Size
+=======================================================================================================================================================================================================================================
+Installing dependencies:
+ cri-tools                                             x86_64                                             1.35.0-150500.1.1                                               kubernetes                                             7.5 M
+Downgrading:
+ kubeadm                                               x86_64                                             1.35.1-150500.1.1                                               kubernetes                                              12 M
+ kubectl                                               x86_64                                             1.35.1-150500.1.1                                               kubernetes                                              11 M
+ kubelet                                               x86_64                                             1.35.1-150500.1.1                                               kubernetes                                              12 M
+
+Transaction Summary
+=======================================================================================================================================================================================================================================
+Install    1 Package
+Downgrade  3 Packages
+
+Total download size: 43 M
+Downloading Packages:
+(1/4): kubectl-1.35.1-150500.1.1.x86_64.rpm                                                                                                                                                             49 MB/s |  11 MB     00:00
+(2/4): kubelet-1.35.1-150500.1.1.x86_64.rpm                                                                                                                                                             42 MB/s |  12 MB     00:00
+(3/4): kubeadm-1.35.1-150500.1.1.x86_64.rpm                                                                                                                                                             33 MB/s |  12 MB     00:00
+(4/4): cri-tools-1.35.0-150500.1.1.x86_64.rpm                                                                                                                                                           39 MB/s | 7.5 MB     00:00
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                                   97 MB/s |  43 MB     00:00
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                                               1/1
+  Installing       : cri-tools-1.35.0-150500.1.1.x86_64                                                                                                                                                                            1/7
+  Downgrading      : kubeadm-1.35.1-150500.1.1.x86_64                                                                                                                                                                              2/7
+  Downgrading      : kubelet-1.35.1-150500.1.1.x86_64                                                                                                                                                                              3/7
+  Running scriptlet: kubelet-1.35.1-150500.1.1.x86_64                                                                                                                                                                              3/7
+  Downgrading      : kubectl-1.35.1-150500.1.1.x86_64                                                                                                                                                                              4/7
+  Running scriptlet: kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/7
+  Cleanup          : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/7
+  Running scriptlet: kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             5/7
+  Cleanup          : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             6/7
+  Cleanup          : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             7/7
+  Running scriptlet: kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             7/7
+  Verifying        : kubeadm-1.35.1-150500.1.1.x86_64                                                                                                                                                                              1/7
+  Verifying        : kubeadm-1.35.10-150500.1.1.x86_64                                                                                                                                                                             2/7
+  Verifying        : kubectl-1.35.1-150500.1.1.x86_64                                                                                                                                                                              3/7
+  Verifying        : kubectl-1.35.10-150500.1.1.x86_64                                                                                                                                                                             4/7
+  Verifying        : kubelet-1.35.1-150500.1.1.x86_64                                                                                                                                                                              5/7
+  Verifying        : kubelet-1.35.10-150500.1.1.x86_64                                                                                                                                                                             6/7
+  Verifying        : cri-tools-1.35.0-150500.1.1.x86_64                                                                                                                                                                            7/7
+
+Downgraded:
+  kubeadm-1.35.1-150500.1.1.x86_64                                            kubectl-1.35.1-150500.1.1.x86_64                                            kubelet-1.35.1-150500.1.1.x86_64
+Installed:
+  cri-tools-1.35.0-150500.1.1.x86_64
+
+Complete!
+[root@ip-35-40-35-122 ec2-user]# systemc restart kubelet
+bash: systemc: command not found
+[root@ip-35-40-35-122 ec2-user]# systemctl restart kubelet
+[root@ip-35-40-35-122 ec2-user]# kubeadm upgrade node
+[upgrade] Reading configuration from the "kubeadm-config" ConfigMap in namespace "kube-system"...
+[upgrade] Use 'kubeadm init phase upload-config kubeadm --config your-config-file' to re-upload it.
+[upgrade/preflight] Running pre-flight checks
+[upgrade/preflight] Skipping prepull. Not a control plane node.
+[upgrade/control-plane] Skipping phase. Not a control plane node.
+[upgrade/kubeconfig] Skipping phase. Not a control plane node.
+W1101 05:59:28.049363   53878 postupgrade.go:105] Using temporary directory /etc/kubernetes/tmp/kubeadm-kubelet-config-2026-11-01-05-59-28 for kubelet config. To override it set the environment variable KUBEADM_UPGRADE_DRYRUN_DIR
+[upgrade] Backing up kubelet config file to /etc/kubernetes/tmp/kubeadm-kubelet-config-2026-11-01-05-59-28/config.yaml
+[patches] Applied patch of type "application/strategic-merge-patch+json" to target "kubeletconfiguration"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[upgrade/kubelet-config] The kubelet configuration for this node was successfully upgraded!
+[upgrade/addon] Skipping the addon/coredns phase. Not a control plane node.
+[upgrade/addon] Skipping the addon/kube-proxy phase. Not a control plane node.
+W1101 05:59:28.094761   53878 postupgrade.go:203] Using temporary directory /etc/kubernetes/tmp/kubeadm-kubelet-env2933904527 for kubelet env file. To override it set the environment variable KUBEADM_UPGRADE_DRYRUN_DIR
+[upgrade] Backing up kubelet env file to /etc/kubernetes/tmp/kubeadm-kubelet-env2933904527/kubeadm-flags.env
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[root@ip-35-40-35-122 ec2-user]#
