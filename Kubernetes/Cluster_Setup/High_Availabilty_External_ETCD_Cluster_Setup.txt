@@ -28,13 +28,13 @@ SUPPORT_END="2029-06-30"
 [root@etcd-node1 ec2-user]# hostname
 etcd-node1
 ======================
-[root@etcd-node1 ec2-user]# mkdir -p /var/lib/etcd 									==> ( do it forother etcd nodes )
+[root@etcd-node1 ec2-user]# mkdir -p /var/lib/etcd 									==> ( do it for other etcd nodes )
 =========================
-[root@etcd-node1 ec2-user]# groupadd etcd											==> ( do it forother etcd nodes )
+[root@etcd-node1 ec2-user]# groupadd etcd											==> ( do it for other etcd nodes )
 =========================
-[root@etcd-node1 ec2-user]# useradd -d /var/lib/etcd -s /bin/false -g etcd etcd		==> ( do it forother etcd nodes )
+[root@etcd-node1 ec2-user]# useradd -d /var/lib/etcd -s /bin/false -g etcd etcd		==> ( do it for other etcd nodes )
 ========================
-[root@etcd-node1 ec2-user]# chown -R etcd:etcd /var/lib/etcd						==> ( do it forother etcd nodes )
+[root@etcd-node1 ec2-user]# chown -R etcd:etcd /var/lib/etcd						==> ( do it for other etcd nodes )
 =======================
 ##Generating TLS Certificate in one of the ETCD EC2 Instance
 For Generating TLS Certificate we are using cfssl from cloudware 
@@ -90,7 +90,6 @@ https://github.com/cloudflare/cfssl/releases/download/v1.7.1/cfssljson_1.7.1_lin
 ================================= 
 [root@etcd-node1 ec2-user]# cfssl gencert --help
 [root@etcd-node1 ec2-user]# cfssl gencert -initca ca-certs.json 
-[root@etcd-node1 ec2-user]# cfssl gencert -initca ca-certs.json | cfssl -bare ca
 [root@etcd-node1 certs]# cfssl gencert -initca ca-certs.json | cfssljson -bare ca
 2026/11/09 04:00:07 [INFO] generating a new CA key and certificate from CSR
 2026/11/09 04:00:07 [INFO] generate received request
@@ -118,7 +117,7 @@ ca-certs.json  ca-config.json  ca-key.pem  ca.csr  ca.pem  etcd-csr.json
   }
 }
 =====================================
-[root@etcd-node1 certs]# cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config ca-config.json -profile=etcd etcd-csr.json | cfssljson -bare etcd
+[root@etcd-node1 certs]# cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config ca-config.json -profile=etcd etcd-ca.json | cfssljson -bare etcd
 2026/11/09 04:04:25 [INFO] generate received request
 2026/11/09 04:04:25 [INFO] received CSR
 2026/11/09 04:04:25 [INFO] generating key: rsa-4096
@@ -147,12 +146,9 @@ URL: https://etcd.io/docs/v3.7/install/
 URL: https://github.com/etcd-io/etcd/releases/	
 
 
-[root@etcd-node1 ec2-user]# ETCD_VER=v3.7.3
-[root@etcd-node1 ec2-user]# GOOGLE_URL=https://storage.googleapis.com/etcd
-[root@etcd-node1 ec2-user]# GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
-[root@etcd-node1 ec2-user]# OWNLOAD_URL=${GOOGLE_URL}
-[root@etcd-node1 ec2-user]# curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz 
-[root@etcd-node1 ec2-user]# tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+[root@etcd-node1 ec2-user]# URL=https://github.com/etcd-io/etcd/releases/download/v3.7.3/etcd-v3.7.3-linux-amd64.tar.gz
+[root@etcd-node1 ec2-user]# curl -L -O $URL 
+[root@etcd-node1 ec2-user]# tar xzvf etcd-v3.7.3-linux-amd64.tar.gz
 [root@etcd-node1 ec2-user]# cd etcd-v3.7.3-linux-amd64
 [root@etcd-node1 ec2-user]# mv etcd etcdctl etcdutl /usr/bin 
 [root@etcd-node1 ec2-user]# etcd --version
